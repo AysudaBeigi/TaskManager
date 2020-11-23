@@ -21,6 +21,7 @@
 
 
     <string name="menu_log_out">Logout</string>
+    <string name="menu_delete_all_tasks">Delete all</string>
 
 
 

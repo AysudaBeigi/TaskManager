@@ -10,15 +10,14 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.fragment.TaskListFragment;
 import com.example.taskmanager2.model.TaskSate;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TaskListPagerActivity extends AppCompatActivity {
 
@@ -47,6 +46,31 @@ public class TaskListPagerActivity extends AppCompatActivity {
         initViews();
 
     }
+
+    /****************** ON CREATE OPTION MENU ********************/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_list_pager_activity, menu);
+        return true;
+    }
+
+    /**************** ON OPTION MENU SELECTED ****************/
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_logout:
+                finish();
+                return true;
+            case R.id.menu_item_delete_all_tasks:
+                //todo delete all user tasks
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
     /********************* FIND VIEWS *********************/
     private void findViews() {
         mTabLayout = findViewById(R.id.tab_layout_task_list);

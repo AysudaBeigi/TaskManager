@@ -1,8 +1,11 @@
 package com.example.taskmanager2.controller.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,8 +30,8 @@ public class TaskListFragment extends Fragment {
     public static final String ARGS_STATE = "state";
     public static final String TAG_EDITABLE_DETAIL_FRAGMENT = "tagEditableDetailFragment";
 
-    public static final int REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT =1 ;
-    public static final int REQUEST_CODE_ADD_TASK_FRAGMENT =2 ;
+    public static final int REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT = 1;
+    public static final int REQUEST_CODE_ADD_TASK_FRAGMENT = 2;
     public static final String TAG_ADD_TASK_FRAGMENT = "tagAddTaskFragment";
 
     private String mUsername;
@@ -77,8 +80,8 @@ public class TaskListFragment extends Fragment {
         mButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddTaskFragment addTaskFragment=
-                        AddTaskFragment.newInstance( mUsername , mState);
+                AddTaskFragment addTaskFragment =
+                        AddTaskFragment.newInstance(mUsername, mState);
                 addTaskFragment.setTargetFragment(
                         TaskListFragment.this, REQUEST_CODE_ADD_TASK_FRAGMENT);
                 addTaskFragment.show(getFragmentManager(), TAG_ADD_TASK_FRAGMENT);
@@ -101,6 +104,12 @@ public class TaskListFragment extends Fragment {
     /*******************  INTI VIEW ********************************/
     private void initView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        updateList();
+
+    }
+
+    /************************* UPDATE LIST *********************/
+    private void updateList() {
         mUserDBRepository = UserDBRepository.getInstance();
         List<Task> userTasks = mUserDBRepository.getTasks(mUsername, mState);
         if (userTasks.size() != 0) {
@@ -116,8 +125,8 @@ public class TaskListFragment extends Fragment {
             mImgEmptyAdd.setVisibility(View.GONE);
             mTextViewEmptyAdd.setVisibility(View.GONE);
         }
-
     }
+
     /**************************** TASK LIST ADAPTER *********************************/
     public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         List<Task> mTasks;
@@ -194,5 +203,23 @@ public class TaskListFragment extends Fragment {
             mTextViewDate = itemView.findViewById(R.id.text_view_description);
             mTextViewFirstChar = itemView.findViewById(R.id.text_view_first_char);
         }
+    }
+
+    /******************** ON ACTIVITY RESULT ****************/
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode != Activity.RESULT_OK || data == null)
+            return;
+        switch (requestCode) {
+            case REQUEST_CODE_ADD_TASK_FRAGMENT:
+                updateList();
+
+                break;
+            case REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT:
+                updateList();
+                break;
+        }
+
+
     }
 }
