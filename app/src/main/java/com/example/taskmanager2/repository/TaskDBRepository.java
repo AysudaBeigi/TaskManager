@@ -62,6 +62,13 @@ public class TaskDBRepository {
         mTasks.remove(task);
 
     }
+    public void deleteTask(UUID taskUuid){
+        for (int i = 0; i <mTasks.size() ; i++) {
+            if(mTasks.get(i).getUUID().equals(taskUuid))
+                mTasks.remove(mTasks.get(i));
+        }
+
+    }
 
 
     public void updateTask(Task task) {
@@ -71,7 +78,6 @@ public class TaskDBRepository {
             mTask.setDescription(task.getDescription());
             mTask.setDate(task.getDate());
             mTask.setSate(task.getSate());
-            mTask.setTime(task.getTime());
         }
 
     }

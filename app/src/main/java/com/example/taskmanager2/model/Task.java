@@ -10,7 +10,6 @@ public class Task {
     private String mTitle;
     private String mDescription;
     private Date mDate;
-    private Date mTime;
     private TaskSate mSate;
     private String mUsername;
     private UUID mUUID;
@@ -20,21 +19,23 @@ public class Task {
         mDate=new Date();
         mSate = sate;
         mUsername = username;
+        mUUID=UUID.randomUUID();
     }
 
-    public Task(String title, String description, Date date, Date time, TaskSate sate, String username) {
+    public Task(String title, String description, Date date, TaskSate sate, String username) {
         mTitle = title;
         mDescription = description;
         mDate = date;
-        mTime = time;
+        mUUID=UUID.randomUUID();
         mSate = sate;
         mUsername = username;
+
     }
 
-    public Task(String description, Date date, Date time, TaskSate sate, String username) {
+    public Task(String description, Date date,  TaskSate sate, String username) {
         mDescription = description;
         mDate = date;
-        mTime = time;
+        mUUID=UUID.randomUUID();
         mSate = sate;
         mUsername = username;
     }
@@ -67,9 +68,6 @@ public class Task {
         mDate = date;
     }
 
-    public void setTime(Date time) {
-        mTime = time;
-    }
     /********************** GETTER ***********************/
     public TaskSate getSate() {
 
@@ -95,8 +93,5 @@ public class Task {
         return mDate;
     }
 
-    public Date getTime() {
-        return mTime;
-    }
 
 }

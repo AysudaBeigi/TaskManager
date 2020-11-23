@@ -9,7 +9,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -21,6 +23,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -31,6 +35,7 @@ public class AddTaskFragment extends DialogFragment {
     public static final String TAG_DATE_PICKER_FRAGMENT = "tagDatePickerFragment";
     public static final int REQUEST_CODE_TIME_PICKER_FRAGMENT = 2;
     public static final String TAG_TIME_PICKER_FRAGMENT = "tagTimePickerFragment";
+    public static final String EXTRA_TASK = "extraTask";
     private TextInputEditText mEditTextTitle;
     private TextInputEditText mEditTextDescription;
     private MaterialButton mButtonDatePicker;
@@ -45,11 +50,12 @@ public class AddTaskFragment extends DialogFragment {
     private Task mTask;
     private TaskDBRepository mTaskDBRepository;
 
-
+    /************************ CONSTRUCTOR *******************/
     public AddTaskFragment() {
         // Required empty public constructor
     }
 
+    /************************* NEW INSTANCE ********************/
     public static AddTaskFragment newInstance(String username, TaskSate state) {
         AddTaskFragment fragment = new AddTaskFragment();
         Bundle args = new Bundle();
@@ -59,6 +65,7 @@ public class AddTaskFragment extends DialogFragment {
         return fragment;
     }
 
+    /**************************** ON CREATE ********************/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +76,7 @@ public class AddTaskFragment extends DialogFragment {
 
     }
 
+    /************************** ON CREATE DIALOG ******************/
 
     @NonNull
     @Override
@@ -78,7 +86,7 @@ public class AddTaskFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_add_task, null);
 
         findViews(view);
-        initViews();
+        updateView();
         setListener();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setView(view);
 
@@ -87,20 +95,51 @@ public class AddTaskFragment extends DialogFragment {
 
     }
 
-    private void initViews() {
-        //TODO extract time from date
-        mButtonTimePicker.setText(mTask.getDate().toString());
-        mButtonTimePicker.setText(mTask.getDate().toString());
+    /********************************* FIND VIEWS ***********************/
+    private void findViews(View view) {
+        mEditTextDescription = view.findViewById(R.id.edit_text_description);
+        mEditTextTitle = view.findViewById(R.id.edit_text_title);
+        mButtonTimePicker = view.findViewById(R.id.btn_time_picker);
+        mButtonDatePicker = view.findViewById(R.id.btn_date_picker);
+        mButtonCancel = view.findViewById(R.id.btn_cancel);
+        mButtonSave = view.findViewById(R.id.btn_save);
+    }
+
+    /******************************* UPDATE VIEWS **************************/
+    private void updateView() {
+        mButtonTimePicker.setText(getStringExactTime());
+        mButtonDatePicker.setText(getStringExactDate());
         mCheckBoxSate.setText(mSate.toString());
     }
 
+
+    /************************* GET STRING EXTRACT TIME *******************/
+    private String getStringExactTime() {
+        return new SimpleDateFormat("HH:mm:ss").format(mTask.getDate());
+    }
+
+    /************************* GET STRING EXTRACT DATE ******************/
+    private String getStringExactDate() {
+        return new SimpleDateFormat("yyy/MM/dd").format(mTask.getDate());
+    }
+
+    /*************************** SET LISTENER *************************/
     private void setListener() {
+       // if(TaskListFragment.REQUEST_CODE_ADD_TASK_FRAGMENT==getTargetRequestCode())
         mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Task task = new Task(mUsername, mSate);
-                // task.setDate();
+                updateTask();
+                mTaskDBRepository.insertTask(mTask);
+                sendResult();
 
+            }
+        });
+        mButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTaskDBRepository.deleteTask(mTask);
+                //TODO back to parent
 
             }
         });
@@ -118,7 +157,7 @@ public class AddTaskFragment extends DialogFragment {
         mButtonTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerFragment timePickerFragment = TimePickerFragment.newInstance();
+                TimePickerFragment timePickerFragment = TimePickerFragment.newInstance(mTask.getDate());
                 timePickerFragment.
                         setTargetFragment(
                                 AddTaskFragment.this, REQUEST_CODE_TIME_PICKER_FRAGMENT);
@@ -129,14 +168,22 @@ public class AddTaskFragment extends DialogFragment {
 
     }
 
-    private void findViews(View view) {
-        mEditTextDescription = view.findViewById(R.id.edit_text_description);
-        mEditTextTitle = view.findViewById(R.id.edit_text_title);
-        mButtonTimePicker = view.findViewById(R.id.btn_time_picker);
-        mButtonDatePicker = view.findViewById(R.id.btn_date_picker);
-        mButtonCancel = view.findViewById(R.id.btn_cancel);
-        mButtonSave = view.findViewById(R.id.btn_save);
+    private void sendResult() {
+        Fragment fragment = getTargetFragment();
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_TASK, (Serializable) mTask);
+        fragment.onActivityResult(
+                getTargetRequestCode(),
+                Activity.RESULT_OK, intent);
     }
+
+    /****************************** UPDATE TASK *********************************/
+    private void updateTask() {
+        mTask.setTitle(mEditTextTitle.getText().toString());
+        mTask.setDescription(mEditTextDescription.getText().toString());
+    }
+
+    /******************************* ON ACTIVITY RESULT ************************/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -146,12 +193,16 @@ public class AddTaskFragment extends DialogFragment {
             case REQUEST_CODE_DATE_PICKER_FRAGMENT:
                 Date userSelectedDate =
                         (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_USER_SELECTED_DATE);
-                mTaskDBRepository.insertTask(mTask);
+                mTask.setDate(userSelectedDate);
+                updateView();
                 break;
             case REQUEST_CODE_TIME_PICKER_FRAGMENT:
 
+                Date userSelectedTime =
+                        (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_USER_SELECTED_TIME);
+                mTask.setDate(userSelectedTime);
+                updateView();
                 break;
-
 
         }
 

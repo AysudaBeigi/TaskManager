@@ -11,7 +11,8 @@ import java.util.UUID;
 public class UserDBRepository implements IRepository {
 
     private List<User> mUsers;
-    private List<Task> mTasks;
+    private List<Task> mAllTasks;
+    private TaskDBRepository mTaskDBRepository;
 
 
     private static UserDBRepository sInstance;
@@ -23,6 +24,7 @@ public class UserDBRepository implements IRepository {
     }
 
     public static UserDBRepository getInstance() {
+
         if (sInstance == null) {
             sInstance = new UserDBRepository();
             return sInstance;
@@ -78,17 +80,22 @@ public class UserDBRepository implements IRepository {
     }
 
     public List<Task> getTasks(String username, TaskSate state) {
+        mTaskDBRepository=TaskDBRepository.getInstance();
+        mAllTasks=mTaskDBRepository.getTasks();
 
         List<Task> userTasks = new ArrayList<>();
 
-        for (int i = 0; i < mTasks.size(); i++) {
-            if (mTasks.get(i).getUsername().equals(username)) {
-                if (mTasks.get(i).getSate().toString().equals(state.toString()))
-                    userTasks.add(mTasks.get(i));
+        for (int i = 0; i < mAllTasks.size(); i++) {
+            if (mAllTasks.get(i).getUsername().equals(username)) {
+                if (mAllTasks.get(i).getSate().toString().equals(state.toString()))
+                    userTasks.add(mAllTasks.get(i));
             }
         }
         return userTasks;
     }
+
+
+
 
     public boolean isUsernameTaken(String username) {
         if (getUser(username) != null)
