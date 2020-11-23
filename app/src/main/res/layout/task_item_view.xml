@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_view_first_char"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+
+            android:layout_alignParentTop="true"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center"
+            android:textSize="24sp" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_view_icon"
             android:layout_width="wrap_content"

@@ -9,7 +9,19 @@
     <string name="layout_tab_todo">TODO</string>
     <string name="layout_tab_doing">DOING</string>
     <string name="layout_tab_done">DONE</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="text_view_empty_add">there is no task .for add task click on floating add button</string>
+    <string name="text_view_empty_add">there is no task .for add task click on floating add button
+    </string>
+    <string name="snackbar_invalid_password">password is invalid</string>
+    <string name="snackbar_invalid_username">username is invalid</string>
+    <string name="snackbar_not_exits_user">you have not account.please sign up first</string>
+    <string name="snackbar_user_find">welcome</string>
+
+    <string name="snackbar_is_taken_password">password is taken !!! try another</string>
+    <string name="snackbar_is_taken_username">username is taken !!! try another</string>
+
+
+    <string name="menu_log_out">Logout</string>
+
+
+
 </resources>

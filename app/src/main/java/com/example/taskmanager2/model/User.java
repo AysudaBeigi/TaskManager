@@ -1,5 +1,6 @@
 package com.example.taskmanager2.model;
 
+import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -8,6 +9,11 @@ public class User {
     private String mPassword;
     private UUID mUUID;
 
+    private List<Task> mTasks;
+
+    public List<Task> getTasks() {
+        return mTasks;
+    }
 
     public String getUsername() {
         return mUsername;

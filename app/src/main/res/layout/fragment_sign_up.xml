@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_layout_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -41,12 +42,11 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_sing_up"
+            android:id="@+id/btn_sign_up"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/button_sign_up" />
-
 
 
     </LinearLayout>

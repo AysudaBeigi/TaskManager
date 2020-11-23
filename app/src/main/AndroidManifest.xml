@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskManager">
-        <activity android:name=".controller.activity.TaskListPagerActivity"></activity>
+        <activity android:name=".controller.activity.SingleFragmentActivity"></activity>
+        <activity android:name=".controller.activity.SignUpActivity" />
+        <activity android:name=".controller.activity.TaskListPagerActivity" />
         <activity android:name=".controller.activity.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
