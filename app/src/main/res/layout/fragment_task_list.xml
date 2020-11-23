@@ -25,7 +25,7 @@
         app:srcCompat="@mipmap/img_empty_add_foreground" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_view_date"
+        android:id="@+id/text_view_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/img_view_empty_add"

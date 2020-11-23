@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskSate;
-import com.example.taskmanager2.model.User;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -26,6 +25,12 @@ public class TaskListFragment extends Fragment {
 
     public static final String ARGS_USERNAME = "username";
     public static final String ARGS_STATE = "state";
+    public static final String TAG_EDITABLE_DETAIL_FRAGMENT = "tagEditableDetailFragment";
+
+    public static final int REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT =1 ;
+    public static final int REQUEST_CODE_ADD_TASK_FRAGMENT =2 ;
+    public static final String TAG_ADD_TASK_FRAGMENT = "tagAddTaskFragment";
+
     private String mUsername;
     private TaskSate mState;
 
@@ -34,6 +39,8 @@ public class TaskListFragment extends Fragment {
     private FloatingActionButton mButtonAddTask;
     private ShapeableImageView mImgEmptyAdd;
     private MaterialTextView mTextViewEmptyAdd;
+
+    private TaskListAdapter mTaskListAdapter;
 
     /*********************** CONSTRUCTOR *********************/
     public TaskListFragment() {
@@ -66,17 +73,51 @@ public class TaskListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         findViews(view);
+        initView();
+        mButtonAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddTaskFragment addTaskFragment=
+                        AddTaskFragment.newInstance( mUsername , mState);
+                addTaskFragment.setTargetFragment(
+                        TaskListFragment.this, REQUEST_CODE_ADD_TASK_FRAGMENT);
+                addTaskFragment.show(getFragmentManager(), TAG_ADD_TASK_FRAGMENT);
+            }
+        });
+
+        return view;
+
+    }
+
+    /********************************** FIND VIEWS ******************************/
+
+    private void findViews(View view) {
+        mRecyclerView = view.findViewById(R.id.recycler_view_task_list);
+        mImgEmptyAdd = view.findViewById(R.id.img_view_empty_add);
+        mTextViewEmptyAdd = view.findViewById(R.id.text_view_description);
+        mButtonAddTask = view.findViewById(R.id.btn_add);
+    }
+
+    /*******************  INTI VIEW ********************************/
+    private void initView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mUserDBRepository = UserDBRepository.getInstance();
         List<Task> userTasks = mUserDBRepository.getTasks(mUsername, mState);
+        if (userTasks.size() != 0) {
+            if (mTaskListAdapter != null) {
+                mTaskListAdapter.setTasks(userTasks);
+                mTaskListAdapter.notifyDataSetChanged();
+            } else {
+                mTaskListAdapter = new TaskListAdapter(userTasks);
+                mRecyclerView.setAdapter(mTaskListAdapter);
+            }
 
-        TaskListAdapter adapter = new TaskListAdapter(userTasks);
+        } else {
+            mImgEmptyAdd.setVisibility(View.GONE);
+            mTextViewEmptyAdd.setVisibility(View.GONE);
+        }
 
-        mRecyclerView.setAdapter(adapter);
-
-        return view;
     }
-
     /**************************** TASK LIST ADAPTER *********************************/
     public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         List<Task> mTasks;
@@ -110,7 +151,7 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
             Task task = mTasks.get(position);
-            holder.bind(task);
+            holder.bindView(task);
 
         }
 
@@ -131,6 +172,10 @@ public class TaskListFragment extends Fragment {
                 public void onClick(View v) {
                     EditableDetailFragment editableDetailFragment =
                             EditableDetailFragment.newInstance();
+                    editableDetailFragment.setTargetFragment(
+                            TaskListFragment.this, REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT);
+                    editableDetailFragment.show(getActivity().getSupportFragmentManager(),
+                            TAG_EDITABLE_DETAIL_FRAGMENT);
 
                 }
             });
@@ -138,7 +183,7 @@ public class TaskListFragment extends Fragment {
 
         }
 
-        public void bind(Task task) {
+        public void bindView(Task task) {
             mTextViewTitle.setText(task.getTitle());
             mTextViewDate.setText(task.getDate().toString());
             mTextViewFirstChar.setText(task.getUsername().charAt(0));
@@ -146,17 +191,8 @@ public class TaskListFragment extends Fragment {
 
         private void findViews(@NonNull View itemView) {
             mTextViewTitle = itemView.findViewById(R.id.text_view_title);
-            mTextViewDate = itemView.findViewById(R.id.text_view_date);
+            mTextViewDate = itemView.findViewById(R.id.text_view_description);
             mTextViewFirstChar = itemView.findViewById(R.id.text_view_first_char);
         }
-    }
-
-    /********************************** FIND VIEWS ******************************/
-
-    private void findViews(View view) {
-        mRecyclerView = view.findViewById(R.id.recycler_view_task_list);
-        mImgEmptyAdd = view.findViewById(R.id.img_view_empty_add);
-        mTextViewEmptyAdd = view.findViewById(R.id.text_view_date);
-        mButtonAddTask = view.findViewById(R.id.btn_add);
     }
 }

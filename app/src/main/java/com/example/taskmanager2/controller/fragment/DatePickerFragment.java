@@ -1,66 +1,117 @@
 package com.example.taskmanager2.controller.fragment;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.DatePicker;
 
 import com.example.taskmanager2.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DatePickerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DatePickerFragment extends Fragment {
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class DatePickerFragment extends DialogFragment {
+    public static final String ARGS_TASK_NOW_DATE = "argsTaskNowDate";
+    public static final String EXTRA_USER_SELECTED_DATE = "com.example.taskmanager2.extraUserSelectedDate";
+    private Date mTaskNowDate;
+    private DatePicker mDatePicker;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    /****************** CONSTRUCTOR *****************/
     public DatePickerFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DatePickerFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DatePickerFragment newInstance(String param1, String param2) {
+    /******************* NEW INSTANCE *****************/
+
+    public static DatePickerFragment newInstance(Date date) {
         DatePickerFragment fragment = new DatePickerFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARGS_TASK_NOW_DATE, date);
         fragment.setArguments(args);
         return fragment;
     }
 
+    /**************** ON CREATE ******************/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        mTaskNowDate = (Date) getArguments().getSerializable(ARGS_TASK_NOW_DATE);
+
     }
 
+    /*************** ON CREATE DIALOG ****************/
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_date_picker, container, false);
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.fragment_date_picker, null);
+
+        findViews(view);
+
+        setNowDateForDatePicker();
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Date userSelectedDate = extractUserSelectedDate();
+                        sendResult(userSelectedDate);
+
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null);
+
+        return builder.create();
+    }
+
+    /***************** SEND RESULT *******************/
+    private void sendResult(Date userSelectedDate) {
+        Fragment fragment = getTargetFragment();
+        int requestCode = getTargetRequestCode();
+        int resultCode = Activity.RESULT_OK;
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_USER_SELECTED_DATE, userSelectedDate);
+        fragment.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    /***************** EXTRACT USER SELECTED DATE *****************/
+    private Date extractUserSelectedDate() {
+        int year = mDatePicker.getYear();
+        int month = mDatePicker.getMonth();
+        int dayOfMonth = mDatePicker.getDayOfMonth();
+        GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, dayOfMonth);
+        return gregorianCalendar.getTime();
+    }
+
+    /****************** SET NOW DATE FOR DATE PICKER ***********/
+
+    private void setNowDateForDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mTaskNowDate);
+        int year = calendar.get(Calendar.YEAR);
+        int monthOfYear = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        mDatePicker.init(year, monthOfYear, dayOfMonth, null);
+    }
+
+    /******************* FIND VIEWS *****************/
+    private void findViews(View view) {
+        mDatePicker = view.findViewById(R.id.btn_date_picker);
     }
 }

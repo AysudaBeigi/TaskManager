@@ -23,8 +23,8 @@ public class UserDBRepository implements IRepository {
     }
 
     public static UserDBRepository getInstance() {
-        if (sInstance == null){
-            sInstance=new UserDBRepository();
+        if (sInstance == null) {
+            sInstance = new UserDBRepository();
             return sInstance;
         }
         return sInstance;
@@ -65,6 +65,7 @@ public class UserDBRepository implements IRepository {
 
     public void updateUser(User user) {
 
+
         for (int i = 0; i < mUsers.size(); i++) {
             if (mUsers.get(i).getUUID().equals(user.getUUID())) {
                 mUsers.get(i).setPassword(user.getPassword());
@@ -76,29 +77,31 @@ public class UserDBRepository implements IRepository {
 
     }
 
-    public boolean isUsernameTaken(String username ){
-        if(getUser(username)!=null)
+    public List<Task> getTasks(String username, TaskSate state) {
+
+        List<Task> userTasks = new ArrayList<>();
+
+        for (int i = 0; i < mTasks.size(); i++) {
+            if (mTasks.get(i).getUsername().equals(username)) {
+                if (mTasks.get(i).getSate().toString().equals(state.toString()))
+                    userTasks.add(mTasks.get(i));
+            }
+        }
+        return userTasks;
+    }
+
+    public boolean isUsernameTaken(String username) {
+        if (getUser(username) != null)
             return true;
         return false;
     }
 
-    public boolean isPasswordTaken(String password ){
+    public boolean isPasswordTaken(String password) {
         for (int i = 0; i < mUsers.size(); i++) {
             if (mUsers.get(i).getPassword().equals(password))
                 return true;
         }
         return false;
-    }
-
-    public List<Task> getTasks(String username , TaskSate state){
-        List<Task> userTasks=new ArrayList<>();
-        for (int i = 0; i <mTasks.size() ; i++) {
-            if(mTasks.get(i).getUsername().equals(username)){
-                if(mTasks.get(i).getSate().toString().equals(state.toString()))
-                    userTasks.add(mTasks.get(i));
-            }
-        }
-        return userTasks;
     }
 
 

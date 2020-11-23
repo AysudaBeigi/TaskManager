@@ -30,7 +30,7 @@
             android:textSize="20sp" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_date"
+            android:id="@+id/text_view_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -49,14 +49,14 @@
             android:textSize="20sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_dialog_date"
+            android:id="@+id/btn_date_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             tools:text="date" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_dialog_time"
+            android:id="@+id/btn_time_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -67,8 +67,31 @@
             android:id="@+id/check_box_sate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="state" />
+            android:layout_margin="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="Cancel"
+                app:rippleColor="@color/blue_35" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="Save"
+                app:rippleColor="@color/blue_35" />
+        </LinearLayout>
 
     </LinearLayout>
 

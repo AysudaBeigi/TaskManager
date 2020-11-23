@@ -1,6 +1,5 @@
 package com.example.taskmanager2.controller.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.taskmanager2.R;
-import com.example.taskmanager2.controller.activity.LauncherActivity;
-import com.example.taskmanager2.controller.activity.SignUpActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.model.User;
 import com.example.taskmanager2.repository.UserDBRepository;

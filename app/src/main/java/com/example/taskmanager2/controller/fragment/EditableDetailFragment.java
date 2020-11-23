@@ -2,6 +2,7 @@ package com.example.taskmanager2.controller.fragment;
 
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.taskmanager2.R;
 
-public class EditableDetailFragment extends Fragment {
+public class EditableDetailFragment extends DialogFragment {
 
 
     public EditableDetailFragment() {

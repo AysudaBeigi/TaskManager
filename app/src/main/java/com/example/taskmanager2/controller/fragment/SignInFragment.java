@@ -8,14 +8,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.taskmanager2.R;
-import com.example.taskmanager2.controller.activity.SignUpActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.button.MaterialButton;
