@@ -106,11 +106,13 @@ public class DatePickerFragment extends DialogFragment {
         int year = calendar.get(Calendar.YEAR);
         int monthOfYear = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        mDatePicker.init(year, monthOfYear, dayOfMonth, null);
+        mDatePicker.init(year, monthOfYear, dayOfMonth,null);
+
+
     }
 
     /******************* FIND VIEWS *****************/
     private void findViews(View view) {
-        mDatePicker = view.findViewById(R.id.btn_date_picker);
+        mDatePicker = view.findViewById(R.id.date_picker);
     }
 }

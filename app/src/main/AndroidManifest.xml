@@ -12,7 +12,7 @@
         <activity android:name=".controller.activity.SingleFragmentActivity"></activity>
         <activity android:name=".controller.activity.SignUpActivity" />
         <activity android:name=".controller.activity.TaskListPagerActivity" />
-        <activity android:name=".controller.activity.LauncherActivity">
+        <activity android:name=".controller.activity.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

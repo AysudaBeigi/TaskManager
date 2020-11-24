@@ -81,6 +81,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:text="Cancel"
+                android:visibility="invisible"
                 app:rippleColor="@color/blue_35" />
 
             <com.google.android.material.button.MaterialButton
@@ -90,6 +91,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:text="Save"
+                android:visibility="invisible"
                 app:rippleColor="@color/blue_35" />
         </LinearLayout>
 

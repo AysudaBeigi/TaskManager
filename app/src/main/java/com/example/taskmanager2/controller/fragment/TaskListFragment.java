@@ -45,6 +45,8 @@ public class TaskListFragment extends Fragment {
 
     private TaskListAdapter mTaskListAdapter;
 
+    private Task mTask;
+
     /*********************** CONSTRUCTOR *********************/
     public TaskListFragment() {
         // Required empty public constructor
@@ -77,20 +79,12 @@ public class TaskListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         findViews(view);
         initView();
-        mButtonAddTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddTaskFragment addTaskFragment =
-                        AddTaskFragment.newInstance(mUsername, mState);
-                addTaskFragment.setTargetFragment(
-                        TaskListFragment.this, REQUEST_CODE_ADD_TASK_FRAGMENT);
-                addTaskFragment.show(getFragmentManager(), TAG_ADD_TASK_FRAGMENT);
-            }
-        });
+        setListener();
 
         return view;
 
     }
+
 
     /********************************** FIND VIEWS ******************************/
 
@@ -108,11 +102,27 @@ public class TaskListFragment extends Fragment {
 
     }
 
+    /******************* SET LISTENER ********************/
+    private void setListener() {
+        mButtonAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddTaskFragment addTaskFragment =
+                        AddTaskFragment.newInstance(mUsername, mState);
+                addTaskFragment.setTargetFragment(
+                        TaskListFragment.this, REQUEST_CODE_ADD_TASK_FRAGMENT);
+                addTaskFragment.show(getFragmentManager(), TAG_ADD_TASK_FRAGMENT);
+            }
+        });
+    }
+
     /************************* UPDATE LIST *********************/
-    private void updateList() {
+    public void updateList() {
         mUserDBRepository = UserDBRepository.getInstance();
         List<Task> userTasks = mUserDBRepository.getTasks(mUsername, mState);
-        if (userTasks.size() != 0) {
+        if (userTasks.size() != 0 && userTasks != null) {
+            goneEmptyAddViews();
+
             if (mTaskListAdapter != null) {
                 mTaskListAdapter.setTasks(userTasks);
                 mTaskListAdapter.notifyDataSetChanged();
@@ -121,10 +131,22 @@ public class TaskListFragment extends Fragment {
                 mRecyclerView.setAdapter(mTaskListAdapter);
             }
 
+
         } else {
-            mImgEmptyAdd.setVisibility(View.GONE);
-            mTextViewEmptyAdd.setVisibility(View.GONE);
+            visibleEmptyAddViews();
         }
+    }
+
+    /********************** VISIBLE EMPTY ADD VIEWS ******************/
+    private void visibleEmptyAddViews() {
+        mImgEmptyAdd.setVisibility(View.VISIBLE);
+        mTextViewEmptyAdd.setVisibility(View.VISIBLE);
+    }
+
+    /*************** GONE  EMPTY ADD VIEWS *******************/
+    private void goneEmptyAddViews() {
+        mImgEmptyAdd.setVisibility(View.GONE);
+        mTextViewEmptyAdd.setVisibility(View.GONE);
     }
 
     /**************************** TASK LIST ADAPTER *********************************/
@@ -180,7 +202,7 @@ public class TaskListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     EditableDetailFragment editableDetailFragment =
-                            EditableDetailFragment.newInstance();
+                            EditableDetailFragment.newInstance(mTask);
                     editableDetailFragment.setTargetFragment(
                             TaskListFragment.this, REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT);
                     editableDetailFragment.show(getActivity().getSupportFragmentManager(),
@@ -195,7 +217,7 @@ public class TaskListFragment extends Fragment {
         public void bindView(Task task) {
             mTextViewTitle.setText(task.getTitle());
             mTextViewDate.setText(task.getDate().toString());
-            mTextViewFirstChar.setText(task.getUsername().charAt(0));
+            mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
         }
 
         private void findViews(@NonNull View itemView) {
@@ -212,10 +234,13 @@ public class TaskListFragment extends Fragment {
             return;
         switch (requestCode) {
             case REQUEST_CODE_ADD_TASK_FRAGMENT:
+                mTask= (Task) data.getSerializableExtra(AddTaskFragment.EXTRA_TASK);
                 updateList();
 
                 break;
             case REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT:
+                mTask= (Task) data.getSerializableExtra(EditableDetailFragment.EXTRA_TASK);
+
                 updateList();
                 break;
         }

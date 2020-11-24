@@ -11,9 +11,9 @@
     <string name="layout_tab_done">DONE</string>
     <string name="text_view_empty_add">there is no task .for add task click on floating add button
     </string>
-    <string name="snackbar_invalid_password">password is invalid</string>
-    <string name="snackbar_invalid_username">username is invalid</string>
+    <string name="snackbar_invalid_username_or_password">username or password is invalid</string>
     <string name="snackbar_not_exits_user">you have not account.please sign up first</string>
+    <string name="snackbar_empty_username_or_password">username or password is empty!!</string>
     <string name="snackbar_user_find">welcome</string>
 
     <string name="snackbar_is_taken_password">password is taken !!! try another</string>

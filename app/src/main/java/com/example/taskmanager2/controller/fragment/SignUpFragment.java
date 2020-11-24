@@ -4,14 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.taskmanager2.R;
+import com.example.taskmanager2.controller.activity.SignInActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.model.User;
 import com.example.taskmanager2.repository.UserDBRepository;
@@ -51,6 +52,8 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("TAG", "sign up fragment onCreate ");
+
         mUserDBRepository = UserDBRepository.getInstance();
     }
 
@@ -58,6 +61,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("TAG", "sign up fragment onCreateView ");
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         findViews(view);
         setListener();
@@ -79,32 +83,27 @@ public class SignUpFragment extends Fragment {
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("TAG", "sign up fragment signup listener ");
                 mUsername = mEditTextUsername.getText().toString();
                 mPassword = mEditTextPassword.getText().toString();
                 if (mUsername != "" && mPassword != "")
                     if (mUserDBRepository.isUsernameTaken(mUsername)) {
+
+                        Log.d("TAG", "username is taken ");
                         generateSnackbar(mLinearLayoutSignup, R.string.snackbar_is_taken_username);
                     } else {
+                        Log.d("TAG", "pass is taken");
                         if (mUserDBRepository.isPasswordTaken(mPassword))
                             generateSnackbar(mLinearLayoutSignup, R.string.snackbar_is_taken_password);
                         else {
+                            Log.d("TAG", "valid usernam and pass . create user");
                             User user = new User(mUsername, mPassword);
                             mUserDBRepository.insertUser(user);
-                     /*  Intent intent= LauncherActivity.newIntent(getActivity());
-                        startActivity(intent);*/
-                            Intent intent = new Intent();
-                            getTargetFragment().onActivityResult(SignInFragment.REQUEST_CODE_SIGN_UP,
-                                    getActivity().RESULT_OK, intent);
-
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            fragmentManager.beginTransaction().remove(SignUpFragment.this)
-                                    .add(R.id.fragment_container, SignInFragment.newInstance())
-                                    .remove(SignUpFragment.this)
-                                    .commit();
-
-
-                            Intent pagerIntent = TaskListPagerActivity.newIntent(getActivity(), mUsername);
+                            Intent intent = SignInActivity.newIntent(getActivity());
                             startActivity(intent);
+                          /*  Intent pagerIntent = TaskListPagerActivity.newIntent(getActivity(), mUsername);
+                            startActivity(intent);
+                       */
                         }
                     }
             }

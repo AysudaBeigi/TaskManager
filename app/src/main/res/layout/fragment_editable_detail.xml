@@ -72,6 +72,7 @@
             android:text="state" />
 
 
+<!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -81,9 +82,10 @@
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="10dp"
+                android:layout_weight="1"
                 android:text="Save"
+                android:visibility="invisible"
                 app:rippleColor="@color/blue_35" />
 
             <com.google.android.material.button.MaterialButton
@@ -91,8 +93,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Delete"
                 android:layout_weight="1"
+                android:text="Delete"
+                android:visibility="invisible"
                 app:rippleColor="#FFFFFF" />
 
             <com.google.android.material.button.MaterialButton
@@ -100,10 +103,61 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Edit"
                 android:layout_weight="1"
+                android:text="Edit"
+                android:visibility="invisible"
                 app:rippleColor="#FFFFFF" />
         </LinearLayout>
+-->
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Edit task sate "
+            android:textSize="20dp"
+            android:layout_margin="10dp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textColor="@color/purple_89"/>
+        <RadioGroup
+            android:id="@+id/radio_group_edit_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/check_box_sate"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/btn_todo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="2dp"
+                android:text="TODO"
+                android:textAllCaps="true" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+
+                android:id="@+id/btn_doing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="2dp"
+                android:text="DOING"
+                android:textAllCaps="true" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+
+                android:id="@+id/btn_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="2dp"
+                android:text="DONE"
+                android:textAllCaps="true" />
+
+        </RadioGroup>
+
+
 
 
     </LinearLayout>

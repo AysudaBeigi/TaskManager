@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.fragment.SignUpFragment;
@@ -14,8 +15,10 @@ import com.example.taskmanager2.controller.fragment.SignUpFragment;
 public class SignUpActivity extends SingleFragmentActivity {
 
     public static Intent newIntent(Context context) {
+        Log.d("TAG","this is SignUp activity  ");
 
-         Intent intent = new Intent(context, SignUpActivity.class);
+
+        Intent intent = new Intent(context, SignUpActivity.class);
         return intent;
     }
 

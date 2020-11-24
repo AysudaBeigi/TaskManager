@@ -1,5 +1,7 @@
 package com.example.taskmanager2.repository;
 
+import android.util.Log;
+
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskSate;
 import com.example.taskmanager2.model.User;
@@ -19,6 +21,7 @@ public class UserDBRepository implements IRepository {
 
 
     private UserDBRepository() {
+        Log.d("TAG","new  uer repository and user array list ");
 
         mUsers = new ArrayList<>();
     }
@@ -26,9 +29,12 @@ public class UserDBRepository implements IRepository {
     public static UserDBRepository getInstance() {
 
         if (sInstance == null) {
+        Log.d("TAG","sInstance is null ");
             sInstance = new UserDBRepository();
             return sInstance;
         }
+        Log.d("TAG","sInstance is not null ");
+
         return sInstance;
     }
 
@@ -55,6 +61,8 @@ public class UserDBRepository implements IRepository {
 
 
     public void insertUser(User user) {
+        Log.d("TAG", "insert user  ");
+
         mUsers.add(user);
 
     }

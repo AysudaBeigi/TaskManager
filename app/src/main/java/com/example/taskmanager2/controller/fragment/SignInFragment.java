@@ -8,12 +8,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.taskmanager2.R;
+import com.example.taskmanager2.controller.activity.SignUpActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.button.MaterialButton;
@@ -55,6 +57,9 @@ public class SignInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("TAG", "this is SignIn on create   ");
+
         mUserDBRepository = UserDBRepository.getInstance();
 
     }
@@ -63,6 +68,7 @@ public class SignInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("TAG", "this is SignIn onCreateView   ");
 
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         findViews(view);
@@ -86,49 +92,49 @@ public class SignInFragment extends Fragment {
         mButtonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("TAG", "this is SignIn listener login  ");
+
                 mUsername = mEditTextUsername.getText().toString();
                 mPassword = mEditTextPassword.getText().toString();
                 if (mUsername != "" && mPassword != "")
-                    if (mUserDBRepository.isUsernameTaken(mUsername)) {
-                        //user exits
+                    if (mUserDBRepository.isUsernameTaken(mUsername)
+                            && mUserDBRepository.isPasswordTaken(mPassword)) {
+                        Log.d("TAG", "user exits   ");
+
                         if (isMachUsernameAndPassword()) {
-                            //username and password are correct
+                            Log.d("TAG", "username and password are correct");
+
                             generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_user_find);
                             Intent intent = TaskListPagerActivity.newIntent(getActivity(), mUsername);
                             startActivity(intent);
                         } else {
-                            //username is correct but password is incorrect
-                            generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_invalid_password);
+                            Log.d("TAG", "username is correct but password is incorrect");
+                            generateSnackbar(mLinearLayoutSignIn,
+                                    R.string.snackbar_invalid_username_or_password);
                         }
 
-                    } else {
-                        if (mUserDBRepository.isPasswordTaken(mPassword))
-                            generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_invalid_username);
-                        else
-                            generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_not_exits_user);
+                    } else if (!mUserDBRepository.isUsernameTaken(mUsername)
+                            && !mUserDBRepository.isPasswordTaken(mPassword)) {
+
+                        Log.d("TAG", "you have not account ");
+                        generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_not_exits_user);
                     }
+
             }
         });
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                SignUpFragment signUpFragment = SignUpFragment.newInstance();
-                signUpFragment.setTargetFragment(SignInFragment.this,
-                        REQUEST_CODE_SIGN_UP);
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager
-                        .beginTransaction()
-                        .add(R.id.fragment_container, signUpFragment, TAG)
-                        .remove(SignInFragment.this)
-                        .commit();
-              /*  Intent intent=SignUpActivity.newIntent(getActivity());
+                Log.d("TAG", "up listener in sign in fragment ");
+                Intent intent = SignUpActivity.newIntent(getActivity());
                 startActivity(intent);
-*/
             }
         });
     }
 
-    @Override
+    /*******************  ON ACTIVITY RESULT *****************/
+  /*  @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -140,6 +146,7 @@ public class SignInFragment extends Fragment {
 
         }
     }
+*/
 
     /******************** GENERATE SNACK BAR *********************/
     private void generateSnackbar(View view, int stringId) {

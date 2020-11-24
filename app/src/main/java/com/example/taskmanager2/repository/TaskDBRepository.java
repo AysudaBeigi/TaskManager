@@ -1,5 +1,7 @@
 package com.example.taskmanager2.repository;
 
+import android.util.Log;
+
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.User;
 
@@ -54,6 +56,8 @@ public class TaskDBRepository {
 
 
     public void insertTask(Task task) {
+        Log.d("TAG", "insertTask");
+
         mTasks.add(task);
 
     }
