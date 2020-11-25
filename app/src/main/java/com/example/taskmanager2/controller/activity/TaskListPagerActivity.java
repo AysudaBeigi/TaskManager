@@ -23,6 +23,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskListPagerActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class TaskListPagerActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager2;
     private String mUsername;
-    private ArrayList<TaskListFragment> mTaskListFragments;
+    private ArrayList<TaskListFragment> mTaskListFragments=new ArrayList<>();
 
     /******************* NEW INTENT *********************/
 
@@ -80,14 +81,16 @@ public class TaskListPagerActivity extends AppCompatActivity {
     private void buildLogoutAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
                 .setTitle("Are you sure to exit ?")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                       finish();
+                      Intent intent=SignInActivity.newIntent(TaskListPagerActivity.this);
+                      startActivity(intent);
+
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, null);
+                .setNegativeButton("No", null);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -123,7 +126,7 @@ public class TaskListPagerActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            mTaskListFragments=new ArrayList<>();
+           /* mTaskListFragments=new ArrayList<>();
 
             TaskSate state = TaskSate.DONE;
             switch (position) {
@@ -139,14 +142,19 @@ public class TaskListPagerActivity extends AppCompatActivity {
             }
             TaskListFragment taskListFragment= TaskListFragment.newInstance(mUsername, state);
             mTaskListFragments.add(taskListFragment);
-            return taskListFragment;
+          */
+            mTaskListFragments. add(TaskListFragment.newInstance(mUsername,TaskSate.TODO));
+            mTaskListFragments.add(TaskListFragment.newInstance(mUsername,TaskSate.DOING));
+            mTaskListFragments.add(TaskListFragment.newInstance(mUsername,TaskSate.DONE));
+
+            return mTaskListFragments.get(position);
         }
 
     }
 
     /************************ SET TAB VIEW *******************************/
     private void setTabView() {
-        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator
+       /* TabLayoutMediator tabLayoutMediator = new TabLayoutMediator
                 (mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
                     @Override
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -177,9 +185,9 @@ public class TaskListPagerActivity extends AppCompatActivity {
                mTaskListFragments.get(position).updateList();
             }
 
-        });
+        });*/
 
-        /*mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager2.setCurrentItem(tab.getPosition());
@@ -194,7 +202,7 @@ public class TaskListPagerActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });*/
+        });
     }
 
 }

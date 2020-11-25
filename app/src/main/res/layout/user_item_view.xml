@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cardview_light_background">
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@+id/img_view_delete_user"
+        android:fontFamily="sans-serif-black"
+        android:padding="5dp"
+        android:textColor="@color/black_00"
+        android:textColorHint="#958282"
+        android:textSize="24sp"
+
+        android:textStyle="normal" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_sign_up_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_username"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@+id/img_view_delete_user"
+        android:fontFamily="sans-serif-black"
+        android:padding="2dp"
+        android:textColor="@color/violet_20"
+        android:textSize="18sp"
+
+        android:textStyle="normal" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_count__user_tasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_sign_up_date"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@+id/img_view_delete_user"
+        android:fontFamily="sans-serif-black"
+        android:padding="2dp"
+        android:textColor="@color/orange_92"
+        android:textSize="18sp"
+        android:textStyle="normal" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_view_delete_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        app:srcCompat="@mipmap/img_tash_foreground" />
+
+</RelativeLayout>

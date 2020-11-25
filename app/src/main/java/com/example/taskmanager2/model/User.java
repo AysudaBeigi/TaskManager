@@ -1,5 +1,6 @@
 package com.example.taskmanager2.model;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ public class User {
     private String mUsername;
     private String mPassword;
     private UUID mUUID;
+    private final Date mSignUpDate;
 
     private List<Task> mTasks;
 
@@ -21,6 +23,10 @@ public class User {
 
     public String getPassword() {
         return mPassword;
+    }
+
+    public Date getSignUpDate() {
+        return mSignUpDate;
     }
 
     public void setUsername(String username) {
@@ -39,5 +45,6 @@ public class User {
         mUsername = username;
         mPassword = password;
         mUUID=UUID.randomUUID();
+        mSignUpDate=new Date();
     }
 }

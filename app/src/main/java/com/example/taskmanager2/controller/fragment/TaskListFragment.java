@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,7 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("TAG","TLF on create View ");
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         findViews(view);
         initView();
@@ -89,14 +91,19 @@ public class TaskListFragment extends Fragment {
     /********************************** FIND VIEWS ******************************/
 
     private void findViews(View view) {
+        Log.d("TAG","TLF find View ");
+
         mRecyclerView = view.findViewById(R.id.recycler_view_task_list);
         mImgEmptyAdd = view.findViewById(R.id.img_view_empty_add);
-        mTextViewEmptyAdd = view.findViewById(R.id.text_view_description);
+        mTextViewEmptyAdd = view.findViewById(R.id.text_view_date);
         mButtonAddTask = view.findViewById(R.id.btn_add);
     }
 
     /*******************  INTI VIEW ********************************/
     private void initView() {
+        Log.d("TAG","TLF init view ");
+
+        mUserDBRepository=UserDBRepository.getInstance();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateList();
 
@@ -104,6 +111,8 @@ public class TaskListFragment extends Fragment {
 
     /******************* SET LISTENER ********************/
     private void setListener() {
+        Log.d("TAG","TLF listener AddTask ");
+
         mButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,23 +127,29 @@ public class TaskListFragment extends Fragment {
 
     /************************* UPDATE LIST *********************/
     public void updateList() {
-        mUserDBRepository = UserDBRepository.getInstance();
-        List<Task> userTasks = mUserDBRepository.getTasks(mUsername, mState);
-        if (userTasks.size() != 0 && userTasks != null) {
-            goneEmptyAddViews();
+       // if (mUserDBRepository != null) {
+        Log.d("TAG","update List TLF");
 
-            if (mTaskListAdapter != null) {
-                mTaskListAdapter.setTasks(userTasks);
-                mTaskListAdapter.notifyDataSetChanged();
+          mUserDBRepository = UserDBRepository.getInstance();
+            List<Task> userTasks = mUserDBRepository.getTasks(mUsername, mState);
+            if (userTasks.size() != 0 && userTasks != null) {
+                goneEmptyAddViews();
+
+                if (mTaskListAdapter != null) {
+                    Log.d("TAG","update List taskAdapter is not null");
+
+                    mTaskListAdapter.setTasks(userTasks);
+                    mTaskListAdapter.notifyDataSetChanged();
+                } else {
+                    mTaskListAdapter = new TaskListAdapter(userTasks);
+                    mRecyclerView.setAdapter(mTaskListAdapter);
+                }
+
+
             } else {
-                mTaskListAdapter = new TaskListAdapter(userTasks);
-                mRecyclerView.setAdapter(mTaskListAdapter);
+                visibleEmptyAddViews();
             }
-
-
-        } else {
-            visibleEmptyAddViews();
-        }
+       // }
     }
 
     /********************** VISIBLE EMPTY ADD VIEWS ******************/
@@ -151,13 +166,19 @@ public class TaskListFragment extends Fragment {
 
     /**************************** TASK LIST ADAPTER *********************************/
     public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
+
         List<Task> mTasks;
 
         public TaskListAdapter(List<Task> tasks) {
+                    Log.d("TAG","TLF TaskListAdapter ");
             mTasks = tasks;
+
         }
 
         public void setTasks(List<Task> tasks) {
+            Log.d("TAG"," tASK ADAPTER setTask");
+            notifyDataSetChanged();
+
             mTasks = tasks;
         }
 
@@ -173,6 +194,8 @@ public class TaskListFragment extends Fragment {
         @NonNull
         @Override
         public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            Log.d("TAG","TLF onCreateViewHolder ");
+
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View itemView = layoutInflater.inflate(R.layout.task_item_view, parent, false);
 
@@ -181,6 +204,8 @@ public class TaskListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
+            Log.d("TAG","TLF onBindViewHolder ");
+
             Task task = mTasks.get(position);
             holder.bindView(task);
 
@@ -194,13 +219,18 @@ public class TaskListFragment extends Fragment {
         private MaterialTextView mTextViewTitle;
         private MaterialTextView mTextViewDate;
         private MaterialTextView mTextViewFirstChar;
+        private Task mTask;
 
         public TaskViewHolder(@NonNull View itemView) {
+
             super(itemView);
+            Log.d("TAG","TLF TaskViewHolder ");
             findViews(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
+                            Log.d("TAG","TLF itemView.setOnClickListener ");
                     EditableDetailFragment editableDetailFragment =
                             EditableDetailFragment.newInstance(mTask);
                     editableDetailFragment.setTargetFragment(
@@ -215,14 +245,22 @@ public class TaskListFragment extends Fragment {
         }
 
         public void bindView(Task task) {
+            Log.d("TAG","TLF bindView ");
+
+            mTask =task;
             mTextViewTitle.setText(task.getTitle());
             mTextViewDate.setText(task.getDate().toString());
             mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
+
+            Log.d("TAG",mTextViewDate.getText().toString());
+            Log.d("TAG",mTextViewTitle.getText().toString());
         }
 
         private void findViews(@NonNull View itemView) {
-            mTextViewTitle = itemView.findViewById(R.id.text_view_title);
-            mTextViewDate = itemView.findViewById(R.id.text_view_description);
+            Log.d("TAG","TLF   holder findViews ");
+
+            mTextViewTitle = itemView.findViewById(R.id.text_view_username);
+            mTextViewDate = itemView.findViewById(R.id.text_view_date);
             mTextViewFirstChar = itemView.findViewById(R.id.text_view_first_char);
         }
     }
@@ -230,16 +268,19 @@ public class TaskListFragment extends Fragment {
     /******************** ON ACTIVITY RESULT ****************/
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d("TAG","TaskListF == onActivityResult ");
+
         if (resultCode != Activity.RESULT_OK || data == null)
             return;
         switch (requestCode) {
             case REQUEST_CODE_ADD_TASK_FRAGMENT:
-                mTask= (Task) data.getSerializableExtra(AddTaskFragment.EXTRA_TASK);
+                Log.d("TAG","TaskListF == onActivityResult == requestCode AddTask");
+                mTask = (Task) data.getSerializableExtra(AddTaskFragment.EXTRA_TASK);
                 updateList();
 
                 break;
             case REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT:
-                mTask= (Task) data.getSerializableExtra(EditableDetailFragment.EXTRA_TASK);
+                mTask = (Task) data.getSerializableExtra(EditableDetailFragment.EXTRA_TASK);
 
                 updateList();
                 break;
@@ -247,4 +288,22 @@ public class TaskListFragment extends Fragment {
 
 
     }
+
+    @Override
+    public void onPause() {
+        Log.d("TAG","TLF  onPause");
+
+        super.onPause();
+        updateList();
+    }
+
+    @Override
+    public void onResume() {
+        Log.d("TAG","TLF   onResume  ");
+
+        super.onResume();
+        updateList();
+    }
+
+
 }

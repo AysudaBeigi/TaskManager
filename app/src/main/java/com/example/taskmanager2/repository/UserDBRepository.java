@@ -2,6 +2,7 @@ package com.example.taskmanager2.repository;
 
 import android.util.Log;
 
+import com.example.taskmanager2.controller.fragment.DatePickerFragment;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskSate;
 import com.example.taskmanager2.model.User;
@@ -15,6 +16,7 @@ public class UserDBRepository implements IRepository {
     private List<User> mUsers;
     private List<Task> mAllTasks;
     private TaskDBRepository mTaskDBRepository;
+
 
 
     private static UserDBRepository sInstance;

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:background="@color/purple_86">
+
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_view_first_char"
@@ -30,7 +32,7 @@
             app:srcCompat="@mipmap/img_circule_foreground" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_title"
+            android:id="@+id/text_view_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -48,15 +50,13 @@
             tools:text="title" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_description"
+            android:id="@+id/text_view_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_title"
+            android:layout_below="@+id/text_view_username"
             android:layout_alignParentRight="true"
-            android:layout_marginStart="5dp"
-
-            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
+
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
@@ -65,7 +65,6 @@
             android:textSize="24sp"
             android:textStyle="normal"
             tools:text="this is task date " />
-        
 
 
 </RelativeLayout>

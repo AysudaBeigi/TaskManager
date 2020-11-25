@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.taskmanager2.R;
+import com.example.taskmanager2.controller.activity.AdminActivity;
 import com.example.taskmanager2.controller.activity.SignInActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.model.User;
@@ -26,10 +27,12 @@ public class SignUpFragment extends Fragment {
     private TextInputEditText mEditTextPassword;
 
     private MaterialButton mButtonSignUp;
+    private MaterialButton mButtonSignUpAdmin;
 
     private UserDBRepository mUserDBRepository;
 
     private LinearLayout mLinearLayoutSignup;
+
 
     private String mUsername;
     private String mPassword;
@@ -52,7 +55,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TAG", "sign up fragment onCreate ");
+        // Log.d("TAG", "sign up fragment onCreate ");
 
         mUserDBRepository = UserDBRepository.getInstance();
     }
@@ -61,7 +64,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("TAG", "sign up fragment onCreateView ");
+        // Log.d("TAG", "sign up fragment onCreateView ");
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         findViews(view);
         setListener();
@@ -71,6 +74,7 @@ public class SignUpFragment extends Fragment {
     /********************** FIND VIEWS *********************/
     private void findViews(View view) {
         mButtonSignUp = view.findViewById(R.id.btn_sign_up);
+        mButtonSignUpAdmin = view.findViewById(R.id.btn_sign_up_admin);
 
         mEditTextUsername = view.findViewById(R.id.edit_text_username);
         mEditTextPassword = view.findViewById(R.id.edit_text_password);
@@ -83,31 +87,53 @@ public class SignUpFragment extends Fragment {
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "sign up fragment signup listener ");
+                // Log.d("TAG", "sign up fragment signup listener ");
                 mUsername = mEditTextUsername.getText().toString();
                 mPassword = mEditTextPassword.getText().toString();
-                if (mUsername != "" && mPassword != "")
+                if (mUsername != "" && mPassword != "") {
                     if (mUserDBRepository.isUsernameTaken(mUsername)) {
 
-                        Log.d("TAG", "username is taken ");
+                        //Log.d("TAG", "username is taken ");
                         generateSnackbar(mLinearLayoutSignup, R.string.snackbar_is_taken_username);
                     } else {
-                        Log.d("TAG", "pass is taken");
+                        //  Log.d("TAG", "pass is taken");
                         if (mUserDBRepository.isPasswordTaken(mPassword))
                             generateSnackbar(mLinearLayoutSignup, R.string.snackbar_is_taken_password);
                         else {
-                            Log.d("TAG", "valid usernam and pass . create user");
-                            User user = new User(mUsername, mPassword);
-                            mUserDBRepository.insertUser(user);
-                            Intent intent = SignInActivity.newIntent(getActivity());
+                            // Log.d("TAG", "valid usernam and pass . create user");
+                            signUpUser(mUsername, mPassword);
+                            /*Intent intent = SignInActivity.newIntent(getActivity());
                             startActivity(intent);
-                          /*  Intent pagerIntent = TaskListPagerActivity.newIntent(getActivity(), mUsername);
+                         */
+                            Intent intent =
+                                    TaskListPagerActivity.newIntent(getActivity(), mUsername);
                             startActivity(intent);
-                       */
                         }
                     }
+
+                }
             }
         });
+        mButtonSignUpAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUsername = "admin";
+                mEditTextUsername.setText("admin");
+                generateSnackbar(mLinearLayoutSignup, R.string.snackbar_enter_admin_password);
+                mPassword = mEditTextPassword.getText().toString();
+                if (mPassword != "") {
+                    signUpUser(mUsername, mPassword);
+                    Intent intent= AdminActivity.newIntent(getActivity());
+                    startActivity(intent);
+
+                }
+            }
+        });
+    }
+
+    private void signUpUser(String username,String password) {
+        User user = new User(mUsername, mPassword);
+        mUserDBRepository.insertUser(user);
     }
 
 

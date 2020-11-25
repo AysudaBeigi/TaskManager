@@ -15,6 +15,17 @@
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:src="@mipmap/layer_task_manager" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_sign_up_admin"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/green_74"
+        android:text="I am admin"
+        android:textSize="20sp"
+        android:textColor="@color/purple_89"/>
+
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_text_username"

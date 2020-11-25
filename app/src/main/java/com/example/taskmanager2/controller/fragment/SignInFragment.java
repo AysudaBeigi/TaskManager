@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.taskmanager2.R;
+import com.example.taskmanager2.controller.activity.AdminActivity;
 import com.example.taskmanager2.controller.activity.SignUpActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.repository.UserDBRepository;
@@ -68,7 +69,7 @@ public class SignInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("TAG", "this is SignIn onCreateView   ");
+        //Log.d("TAG", "this is SignIn onCreateView   ");
 
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         findViews(view);
@@ -92,23 +93,25 @@ public class SignInFragment extends Fragment {
         mButtonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "this is SignIn listener login  ");
+                //Log.d("TAG", "this is SignIn listener login  ");
 
                 mUsername = mEditTextUsername.getText().toString();
                 mPassword = mEditTextPassword.getText().toString();
                 if (mUsername != "" && mPassword != "")
                     if (mUserDBRepository.isUsernameTaken(mUsername)
                             && mUserDBRepository.isPasswordTaken(mPassword)) {
-                        Log.d("TAG", "user exits   ");
+                        // Log.d("TAG", "user exits   ");
 
                         if (isMachUsernameAndPassword()) {
-                            Log.d("TAG", "username and password are correct");
-
+                            //Log.d("TAG", "username and password are correct");
                             generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_user_find);
-                            Intent intent = TaskListPagerActivity.newIntent(getActivity(), mUsername);
-                            startActivity(intent);
+                            if (mUsername == "admin") {
+                                startAdminActivity();
+                            } else {
+                                startTaskListPagerActivity();
+                            }
                         } else {
-                            Log.d("TAG", "username is correct but password is incorrect");
+                            // Log.d("TAG", "username is correct but password is incorrect");
                             generateSnackbar(mLinearLayoutSignIn,
                                     R.string.snackbar_invalid_username_or_password);
                         }
@@ -116,7 +119,7 @@ public class SignInFragment extends Fragment {
                     } else if (!mUserDBRepository.isUsernameTaken(mUsername)
                             && !mUserDBRepository.isPasswordTaken(mPassword)) {
 
-                        Log.d("TAG", "you have not account ");
+                        //  Log.d("TAG", "you have not account ");
                         generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_not_exits_user);
                     }
 
@@ -126,11 +129,21 @@ public class SignInFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "up listener in sign in fragment ");
+                // Log.d("TAG", "up listener in sign in fragment ");
                 Intent intent = SignUpActivity.newIntent(getActivity());
                 startActivity(intent);
             }
         });
+    }
+
+    private void startTaskListPagerActivity() {
+        Intent intent = TaskListPagerActivity.newIntent(getActivity(), mUsername);
+        startActivity(intent);
+    }
+
+    private void startAdminActivity() {
+        Intent intent = AdminActivity.newIntent(getActivity());
+        startActivity(intent);
     }
 
     /*******************  ON ACTIVITY RESULT *****************/

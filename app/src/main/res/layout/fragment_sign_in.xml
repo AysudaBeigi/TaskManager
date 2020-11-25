@@ -84,6 +84,9 @@
                 android:backgroundTint="@color/blue_35"
                 android:text="@string/button_sign_up"
                 android:textSize="10sp" />
+
+
+
         </LinearLayout>
 
     </LinearLayout>

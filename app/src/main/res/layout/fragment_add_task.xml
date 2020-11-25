@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_title"
+            android:id="@+id/text_view_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -30,7 +30,7 @@
             android:textSize="20sp" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_description"
+            android:id="@+id/text_view_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
