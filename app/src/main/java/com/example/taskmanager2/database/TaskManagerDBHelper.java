@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 import com.example.taskmanager2.database.TaskManagerDBSchema.UserTable.UserCols;
 import com.example.taskmanager2.database.TaskManagerDBSchema.TaskTable.TaskCols;
+
 public class TaskManagerDBHelper extends SQLiteOpenHelper {
 
     public TaskManagerDBHelper(

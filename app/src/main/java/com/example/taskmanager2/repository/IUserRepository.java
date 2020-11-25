@@ -5,7 +5,7 @@ import com.example.taskmanager2.model.User;
 import java.util.List;
 import java.util.UUID;
 
-public interface IRepository {
+public interface IUserRepository {
     public List<User> getUsers();
     public User getUser(String username);
     public User getUser(UUID uuid);

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TaskDBRepository {
+public class TaskDBRepository implements ITaskRepository {
 
     private List<Task> mTasks;
 

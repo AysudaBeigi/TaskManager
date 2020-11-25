@@ -2,7 +2,6 @@ package com.example.taskmanager2.repository;
 
 import android.util.Log;
 
-import com.example.taskmanager2.controller.fragment.DatePickerFragment;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskSate;
 import com.example.taskmanager2.model.User;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class UserDBRepository implements IRepository {
+public class UserDBRepository implements IUserRepository {
 
     private List<User> mUsers;
     private List<Task> mAllTasks;
