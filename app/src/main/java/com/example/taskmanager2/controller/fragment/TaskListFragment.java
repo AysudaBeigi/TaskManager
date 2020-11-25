@@ -23,6 +23,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class TaskListFragment extends Fragment {
@@ -249,7 +251,7 @@ public class TaskListFragment extends Fragment {
 
             mTask =task;
             mTextViewTitle.setText(task.getTitle());
-            mTextViewDate.setText(task.getDate().toString());
+            mTextViewDate.setText(getStringFormatDate(task.getDate()));
             mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
 
             Log.d("TAG",mTextViewDate.getText().toString());
@@ -259,10 +261,14 @@ public class TaskListFragment extends Fragment {
         private void findViews(@NonNull View itemView) {
             Log.d("TAG","TLF   holder findViews ");
 
-            mTextViewTitle = itemView.findViewById(R.id.text_view_username);
+            mTextViewTitle = itemView.findViewById(R.id.text_view_task_title);
             mTextViewDate = itemView.findViewById(R.id.text_view_date);
             mTextViewFirstChar = itemView.findViewById(R.id.text_view_first_char);
         }
+    }
+    /************************* GET STRING FORMAT DATE ******************/
+    private String getStringFormatDate(Date date) {
+        return new SimpleDateFormat("yyy/MM/dd  "+"HH:mm:ss").format(date);
     }
 
     /******************** ON ACTIVITY RESULT ****************/

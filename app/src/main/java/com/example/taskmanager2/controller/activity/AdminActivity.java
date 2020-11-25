@@ -18,7 +18,6 @@ import com.google.android.material.button.MaterialButton;
 public class AdminActivity extends AppCompatActivity {
     private MaterialButton mButtonTaskList;
     private MaterialButton mButtonUserList;
-    private Fragment mChoicedFragment;
 
 
     public static Intent newIntent(Context context){
@@ -33,13 +32,17 @@ public class AdminActivity extends AppCompatActivity {
         findViews();
         setListeners();
 
+       /// startFragment();
+    }
+
+    private void startFragment(Fragment choicedFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment fragment = fragmentManager.findFragmentById(R.id.admin_fragments_container);
 
         if (fragment == null) {
             fragmentManager.
                     beginTransaction().
-                    add(R.id.fragment_container,mChoicedFragment).
+                    add(R.id.admin_fragments_container,choicedFragment).
                     commit();
         }
     }
@@ -48,14 +51,14 @@ public class AdminActivity extends AppCompatActivity {
         mButtonUserList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mChoicedFragment= AllUsersFragment.newInstance();
-
+                startFragment(AllUsersFragment.newInstance());
             }
         });
+
         mButtonTaskList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mChoicedFragment= AllTasksFragment.newInstance();
+                startFragment(AllTasksFragment.newInstance());
 
             }
         });

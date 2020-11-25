@@ -1,29 +1,24 @@
 package com.example.taskmanager2.controller.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.taskmanager2.R;
-import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.User;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
-
-import static com.example.taskmanager2.controller.fragment.TaskListFragment.REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT;
 
 public class AllUsersFragment extends Fragment {
     private RecyclerView mAllUsersRecyclerView;
@@ -36,9 +31,10 @@ public class AllUsersFragment extends Fragment {
 
 
     public static AllUsersFragment newInstance() {
+        Log.d("TAG","all users fragment");
         AllUsersFragment fragment = new AllUsersFragment();
         Bundle args = new Bundle();
-       fragment.setArguments(args);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -71,7 +67,7 @@ public class AllUsersFragment extends Fragment {
 
         if (users.size() != 0 && users != null) {
 
-            if ( mAllUsersAdapter!= null) {
+            if (mAllUsersAdapter != null) {
 
                 mAllUsersAdapter.setUsers(users);
                 mAllUsersAdapter.notifyDataSetChanged();
@@ -110,8 +106,8 @@ public class AllUsersFragment extends Fragment {
         @NonNull
         @Override
         public AllUsersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater inflater=LayoutInflater.from(getActivity());
-            View itemView=inflater.inflate(R.layout.user_item_view,parent,false);
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View itemView = inflater.inflate(R.layout.user_item_view, parent, false);
             return new AllUsersViewHolder(itemView);
         }
 
@@ -154,14 +150,15 @@ public class AllUsersFragment extends Fragment {
             mUser = user;
             mTextViewUsername.setText(user.getUsername());
             SignUpDate.setText(user.getSignUpDate().toString());
-            mTextViewCountUserTasks.setText(user.getTasks().size());
+            if (user.getTasks().size() != 0 && user.getTasks() != null)
+                mTextViewCountUserTasks.setText(user.getTasks().size());
         }
 
         private void findViews(@NonNull View itemView) {
-            mTextViewUsername = itemView.findViewById(R.id.text_view_username);
+            mTextViewUsername = itemView.findViewById(R.id.text_view_task_title);
             SignUpDate = itemView.findViewById(R.id.text_view_sign_up_date);
             mTextViewCountUserTasks = itemView.findViewById(R.id.text_view_count__user_tasks);
-            mImageViewDeleteUser=itemView.findViewById(R.id.img_view_delete_user);
+            mImageViewDeleteUser = itemView.findViewById(R.id.img_view_delete_user);
         }
 
     }

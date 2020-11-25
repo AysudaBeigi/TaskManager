@@ -88,9 +88,10 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Log.d("TAG", "sign up fragment signup listener ");
-                mUsername = mEditTextUsername.getText().toString();
-                mPassword = mEditTextPassword.getText().toString();
-                if (mUsername != "" && mPassword != "") {
+                mUsername = mEditTextUsername.getText().toString().trim();
+                mPassword = mEditTextPassword.getText().toString().trim();
+                if (mUsername != "" && mPassword != ""
+                        && mUsername != null && mPassword != null) {
                     if (mUserDBRepository.isUsernameTaken(mUsername)) {
 
                         //Log.d("TAG", "username is taken ");
@@ -121,9 +122,11 @@ public class SignUpFragment extends Fragment {
                 mEditTextUsername.setText("admin");
                 generateSnackbar(mLinearLayoutSignup, R.string.snackbar_enter_admin_password);
                 mPassword = mEditTextPassword.getText().toString();
-                if (mPassword != "") {
+
+                if (!mPassword.isEmpty() && mPassword != null) {
+                    Log.d("TAG","i am admin password is not null :"+mPassword);
                     signUpUser(mUsername, mPassword);
-                    Intent intent= AdminActivity.newIntent(getActivity());
+                    Intent intent = AdminActivity.newIntent(getActivity());
                     startActivity(intent);
 
                 }
@@ -131,8 +134,8 @@ public class SignUpFragment extends Fragment {
         });
     }
 
-    private void signUpUser(String username,String password) {
-        User user = new User(mUsername, mPassword);
+    private void signUpUser(String username, String password) {
+        User user = new User(username, password);
         mUserDBRepository.insertUser(user);
     }
 

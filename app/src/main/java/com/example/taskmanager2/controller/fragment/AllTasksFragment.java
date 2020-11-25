@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
-import static com.example.taskmanager2.controller.fragment.TaskListFragment.REQUEST_CODE_ADD_TASK_FRAGMENT;
 import static com.example.taskmanager2.controller.fragment.TaskListFragment.REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT;
 import static com.example.taskmanager2.controller.fragment.TaskListFragment.TAG_EDITABLE_DETAIL_FRAGMENT;
 
@@ -89,7 +87,7 @@ public class AllTasksFragment extends Fragment {
     }
 
     private void findView(View view) {
-        mAllTaskRecyclerView = view.findViewById(R.id.recycler_view_task_list);
+        mAllTaskRecyclerView = view.findViewById(R.id.recycler_view_all_tasks);
     }
 
 
@@ -167,7 +165,7 @@ public class AllTasksFragment extends Fragment {
         }
 
         private void findViews(@NonNull View itemView) {
-            mTextViewTitle = itemView.findViewById(R.id.text_view_username);
+            mTextViewTitle = itemView.findViewById(R.id.text_view_task_title);
             mTextViewDate = itemView.findViewById(R.id.text_view_date);
             mTextViewFirstChar = itemView.findViewById(R.id.text_view_first_char);
         }

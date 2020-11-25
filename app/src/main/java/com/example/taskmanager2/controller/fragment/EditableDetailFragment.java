@@ -83,7 +83,7 @@ public class EditableDetailFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
 
-        View view = inflater.inflate(R.layout.fragment_add_task, null);
+        View view = inflater.inflate(R.layout.fragment_editable_detail, null);
 
         findViews(view);
         updateView();
