@@ -12,15 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.model.Task;
-import com.example.taskmanager2.model.TaskSate;
+import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.repository.TaskDBRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -41,6 +41,7 @@ public class EditableDetailFragment extends DialogFragment {
     private TextInputEditText mEditTextDescription;
     private MaterialButton mButtonDatePicker;
     private MaterialButton mButtonTimePicker;
+    private MaterialButton mButtonDeleteTask;
     private MaterialCheckBox mCheckBoxSate;
 
     private RadioGroup mRadioGroupEditState;
@@ -51,7 +52,6 @@ public class EditableDetailFragment extends DialogFragment {
 
     private Task mTask;
     private TaskDBRepository mTaskDBRepository;
-
 
 
     /************************ CONSTRUCTOR *******************/
@@ -97,26 +97,19 @@ public class EditableDetailFragment extends DialogFragment {
 
     private AlertDialog.Builder buildAlertDialog(View view) {
         return new AlertDialog.Builder(getActivity())
-                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mTaskDBRepository.deleteTask(mTask);
-                            Intent intent = new Intent();
-                            sendResult(intent);
 
-                        }
-                    })
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("TAG", "EditalbeDetailF Save listener");
+                        updateTask();
+                        mTaskDBRepository.updateTask(mTask);
+                        Intent intent = new Intent();
+                        intent.putExtra(EXTRA_TASK, mTask);
+                        sendResult(intent);
 
-                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mTaskDBRepository.updateTask(mTask);
-                            Intent intent = new Intent();
-                            intent.putExtra(EXTRA_TASK, mTask);
-                            sendResult(intent);
-
-                        }
-                    }).setView(view);
+                    }
+                }).setView(view);
     }
 
     /********************************* FIND VIEWS ***********************/
@@ -125,6 +118,7 @@ public class EditableDetailFragment extends DialogFragment {
         mEditTextTitle = view.findViewById(R.id.edit_text_title);
         mButtonTimePicker = view.findViewById(R.id.btn_time_picker);
         mButtonDatePicker = view.findViewById(R.id.btn_date_picker);
+        mButtonDeleteTask = view.findViewById(R.id.btn_delete_task);
         mCheckBoxSate = view.findViewById(R.id.check_box_sate);
 
         mRadioGroupEditState = view.findViewById(R.id.radio_group_edit_state);
@@ -185,20 +179,30 @@ public class EditableDetailFragment extends DialogFragment {
 
                 if (checkedId == mRadioButtonTodo.getId()) {
                     mRadioButtonTodo.setChecked(true);
-                    mTask.setSate(TaskSate.TODO);
-                   // mTaskDBRepository.updateTask(mTask);
+                    mTask.setSate(TaskState.TODO);
+                    // mTaskDBRepository.updateTask(mTask);
 
                 } else if (checkedId == mRadioButtonDoing.getId()) {
                     mRadioButtonDoing.setChecked(true);
-                    mTask.setSate(TaskSate.DOING);
-                   // mTaskDBRepository.updateTask(mTask);
+                    mTask.setSate(TaskState.DOING);
+                    // mTaskDBRepository.updateTask(mTask);
 
                 } else if (checkedId == mRadioButtonDone.getId()) {
                     mRadioButtonDone.setChecked(true);
-                    mTask.setSate(TaskSate.DONE);
-                   // mTaskDBRepository.updateTask(mTask);
+                    mTask.setSate(TaskState.DONE);
+                    // mTaskDBRepository.updateTask(mTask);
 
                 }
+
+            }
+        });
+        mButtonDeleteTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TAG", "EditableDetailF Delete listener");
+                mTaskDBRepository.deleteTask(mTask);
+                Intent intent = new Intent();
+                sendResult(intent);
 
             }
         });

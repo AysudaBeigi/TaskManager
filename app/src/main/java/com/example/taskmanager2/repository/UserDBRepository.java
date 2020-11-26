@@ -3,7 +3,7 @@ package com.example.taskmanager2.repository;
 import android.util.Log;
 
 import com.example.taskmanager2.model.Task;
-import com.example.taskmanager2.model.TaskSate;
+import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.model.User;
 
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public class UserDBRepository implements IUserRepository {
 
     }
 
-    public List<Task> getTasks(String username, TaskSate state) {
+    public List<Task> getTasks(String username, TaskState state) {
         mTaskDBRepository=TaskDBRepository.getInstance();
         mAllTasks=mTaskDBRepository.getTasks();
 

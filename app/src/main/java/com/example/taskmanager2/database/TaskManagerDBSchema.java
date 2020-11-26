@@ -3,6 +3,7 @@ package com.example.taskmanager2.database;
 import androidx.annotation.NonNull;
 
 public class TaskManagerDBSchema {
+
     public static final String NAME = "taskManager.db";
     public static final int VERSION = 1;
 

@@ -16,9 +16,13 @@
     <string name="snackbar_not_exits_user">you have not account.please sign up first</string>
     <string name="snackbar_empty_username_or_password">username or password is empty!!</string>
     <string name="snackbar_user_find">welcome</string>
+    <string name="snackbar_not_exits_any_user">Not exits any user</string>
+    <string name="snackbar_not_exits_any_task">Not exits any task</string>
 
-    <string name="snackbar_is_taken_password">password is taken !!! try another</string>
-    <string name="snackbar_is_taken_username">username is taken !!! try another</string>
+    <string name="snackbar_is_taken_username_or_password">username or password is taken !!! try another
+    </string>
+    <string name="snackbar_username_or_password_is_empty">username or password con not be empty!!</string>
+
     <string name="snackbar_enter_admin_password">enter the admin password</string>
 
 

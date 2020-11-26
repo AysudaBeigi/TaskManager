@@ -1,7 +1,6 @@
 package com.example.taskmanager2.model;
 
 import android.util.Log;
-import android.widget.DatePicker;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -13,19 +12,19 @@ public class Task  implements Serializable {
     private String mTitle;
     private String mDescription;
     private Date mDate;
-    private TaskSate mSate;
+    private TaskState mSate;
     private String mUsername;
     private UUID mUUID;
     /******************* CONSTRUCTOR *****************/
 
-    public Task(String username,TaskSate sate ) {
+    public Task(String username, TaskState sate ) {
         mDate=new Date();
         mSate = sate;
         mUsername = username;
         mUUID=UUID.randomUUID();
     }
 
-    public Task(String title, String description, Date date, TaskSate sate, String username) {
+    public Task(String title, String description, Date date, TaskState sate, String username) {
         mTitle = title;
         mDescription = description;
         mDate = date;
@@ -35,7 +34,7 @@ public class Task  implements Serializable {
 
     }
 
-    public Task(String description, Date date,  TaskSate sate, String username) {
+    public Task(String description, Date date, TaskState sate, String username) {
         mDescription = description;
         mDate = date;
         mUUID=UUID.randomUUID();
@@ -48,7 +47,7 @@ public class Task  implements Serializable {
 
 
     /******************* SETTER ************************/
-    public void setSate(TaskSate sate) {
+    public void setSate(TaskState sate) {
         mSate = sate;
     }
 
@@ -101,7 +100,7 @@ public class Task  implements Serializable {
 
 
     /********************** GETTER ***********************/
-    public TaskSate getSate() {
+    public TaskState getSate() {
 
         return mSate;
     }

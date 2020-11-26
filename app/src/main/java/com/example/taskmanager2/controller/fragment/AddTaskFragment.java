@@ -12,20 +12,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.model.Task;
-import com.example.taskmanager2.model.TaskSate;
+import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.repository.TaskDBRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -45,11 +43,8 @@ public class AddTaskFragment extends DialogFragment {
     private MaterialButton mButtonTimePicker;
     private MaterialCheckBox mCheckBoxSate;
 
-    /* private MaterialButton mButtonCancel;
-     private MaterialButton mButtonSave;
- */
     private String mUsername;
-    private TaskSate mSate;
+    private TaskState mSate;
 
     private Task mTask;
     private TaskDBRepository mTaskDBRepository;
@@ -60,7 +55,7 @@ public class AddTaskFragment extends DialogFragment {
     }
 
     /************************* NEW INSTANCE ********************/
-    public static AddTaskFragment newInstance(String username, TaskSate state) {
+    public static AddTaskFragment newInstance(String username, TaskState state) {
         AddTaskFragment fragment = new AddTaskFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARGS_STATE, state);
@@ -74,7 +69,7 @@ public class AddTaskFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUsername = getArguments().getString(ARGS_USERNAME);
-        mSate = (TaskSate) getArguments().getSerializable(ARGS_STATE);
+        mSate = (TaskState) getArguments().getSerializable(ARGS_STATE);
         mTaskDBRepository = TaskDBRepository.getInstance();
         mTask = new Task(mUsername, mSate);
         Log.d("TAG", "AddTaskFragment on create " + mTask.getUsername());
@@ -131,10 +126,7 @@ public class AddTaskFragment extends DialogFragment {
         mButtonTimePicker = view.findViewById(R.id.btn_time_picker);
         mButtonDatePicker = view.findViewById(R.id.btn_date_picker);
         mCheckBoxSate = view.findViewById(R.id.check_box_sate);
-      /*
-        mButtonCancel = view.findViewById(R.id.btn_cancel);
-        mButtonSave = view.findViewById(R.id.btn_save);
-   */
+
     }
 
     /******************************* UPDATE VIEWS **************************/
@@ -160,25 +152,7 @@ public class AddTaskFragment extends DialogFragment {
     /*************************** SET LISTENER *************************/
     private void setListener() {
 
-        // if(TaskListFragment.REQUEST_CODE_ADD_TASK_FRAGMENT==getTargetRequestCode())
-       /* mButtonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateTask();
-                mTaskDBRepository.insertTask(mTask);
-                sendResult();
 
-            }
-        });
-        mButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTaskDBRepository.deleteTask(mTask);
-                //TODO back to parent
-
-            }
-        });
-*/
         mButtonDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

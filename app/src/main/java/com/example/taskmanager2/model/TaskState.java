@@ -1,6 +1,6 @@
 package com.example.taskmanager2.model;
 
-public enum TaskSate {
+public enum TaskState {
     DOING,
     DONE,
     TODO

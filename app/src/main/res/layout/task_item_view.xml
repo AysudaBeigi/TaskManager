@@ -55,7 +55,9 @@
             android:padding="5dp"
             android:textSize="18sp"
             android:textStyle="bold"
-            tools:text="Title heollwow" />
+            tools:text="Title heollwow"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/img_view_icon" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_view_date"
@@ -72,7 +74,9 @@
             android:padding="5dp"
             android:textSize="18sp"
             android:textStyle="normal"
-            tools:text="Hiiiiiiiiiii" />
+            tools:text="Hiiiiiiiiiii"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/img_view_icon" />
 
 
 </RelativeLayout>
