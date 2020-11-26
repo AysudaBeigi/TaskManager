@@ -12,7 +12,6 @@ import com.example.taskmanager2.controller.fragment.SignInFragment;
 public class SignInActivity extends SingleFragmentActivity {
     /********************** NEW INTENT *************************/
     public static Intent newIntent(Context context) {
-        Log.d("TAG","this is SignIn activity  ");
 
         Intent intent = new Intent(context, SignInActivity.class);
         return intent;

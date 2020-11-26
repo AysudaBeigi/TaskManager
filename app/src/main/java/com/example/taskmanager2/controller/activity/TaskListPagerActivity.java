@@ -12,15 +12,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.fragment.TaskListFragment;
-import com.example.taskmanager2.model.TaskSate;
+import com.example.taskmanager2.model.Task;
+import com.example.taskmanager2.model.TaskState;
+import com.example.taskmanager2.repository.TaskDBRepository;
+import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,9 @@ public class TaskListPagerActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager2;
     private String mUsername;
-    private ArrayList<TaskListFragment> mTaskListFragments=new ArrayList<>();
+    private UserDBRepository mUserDBRepository;
+    private TaskDBRepository mTaskDBRepository;
+    private ArrayList<TaskListFragment> mTaskListFragments = new ArrayList<>();
 
     /******************* NEW INTENT *********************/
 
@@ -48,11 +53,14 @@ public class TaskListPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list_pager);
         mUsername = getIntent().getStringExtra(EXTRA_USERNAME);
+        mUserDBRepository = UserDBRepository.getInstance();
+        mTaskDBRepository = TaskDBRepository.getInstance();
 
         findViews();
         initViews();
 
     }
+
 
     /****************** ON CREATE OPTION MENU ********************/
     @Override
@@ -70,7 +78,7 @@ public class TaskListPagerActivity extends AppCompatActivity {
                 buildLogoutAlertDialog();
                 return true;
             case R.id.menu_item_delete_all_tasks:
-                //todo delete all user tasks
+                buildDeleteUserTasksAlertDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -78,15 +86,19 @@ public class TaskListPagerActivity extends AppCompatActivity {
         }
     }
 
+    /*************** BUILD LOGOUT USER ALERT DIALOG *****************/
+
+
     private void buildLogoutAlertDialog() {
+        Log.d("TAG","Exit Alertdialog");
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
-                .setTitle("Are you sure to exit ?")
+                .setMessage("Are you sure to exit ?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                      Intent intent=SignInActivity.newIntent(TaskListPagerActivity.this);
-                      startActivity(intent);
+                        Intent intent = SignInActivity.newIntent(TaskListPagerActivity.this);
+                        startActivity(intent);
 
                     }
                 })
@@ -96,6 +108,42 @@ public class TaskListPagerActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /*************** BUILD DELETE USER TASKS ALERT DIALOG *****************/
+    private void buildDeleteUserTasksAlertDialog() {
+        Log.d("TAG","DeleteAll Alertdialog");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
+                .setMessage("Are you sure to delete all ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteUserTasks();
+                    }
+                })
+                .setNegativeButton("No", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    /********************** DELETE USER TASKS *******************/
+    private void deleteUserTasks() {
+        List<TaskState> taskStates = new ArrayList<TaskState>();
+        taskStates.add(TaskState.DONE);
+        taskStates.add(TaskState.DOING);
+        taskStates.add(TaskState.TODO);
+        for (int i = 0; i < 3; i++) {
+            List<Task> userTasks = mUserDBRepository.getTasks(mUsername, taskStates.get(i));
+            if (userTasks.size() != 0 && userTasks != null) {
+
+                for (int j = 0; j < userTasks.size(); j++) {
+
+                    mTaskDBRepository.deleteTask(userTasks.get(j));
+                }
+            }
+        }
+    }
     /********************* FIND VIEWS *********************/
     private void findViews() {
         mTabLayout = findViewById(R.id.tab_layout_task_list);
@@ -143,9 +191,9 @@ public class TaskListPagerActivity extends AppCompatActivity {
             TaskListFragment taskListFragment= TaskListFragment.newInstance(mUsername, state);
             mTaskListFragments.add(taskListFragment);
           */
-            mTaskListFragments. add(TaskListFragment.newInstance(mUsername,TaskSate.TODO));
-            mTaskListFragments.add(TaskListFragment.newInstance(mUsername,TaskSate.DOING));
-            mTaskListFragments.add(TaskListFragment.newInstance(mUsername,TaskSate.DONE));
+            mTaskListFragments.add(TaskListFragment.newInstance(mUsername, TaskState.TODO));
+            mTaskListFragments.add(TaskListFragment.newInstance(mUsername, TaskState.DOING));
+            mTaskListFragments.add(TaskListFragment.newInstance(mUsername, TaskState.DONE));
 
             return mTaskListFragments.get(position);
         }

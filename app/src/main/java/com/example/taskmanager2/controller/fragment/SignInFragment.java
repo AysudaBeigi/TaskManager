@@ -97,15 +97,14 @@ public class SignInFragment extends Fragment {
 
                 mUsername = mEditTextUsername.getText().toString();
                 mPassword = mEditTextPassword.getText().toString();
-                if (mUsername != "" && mPassword != "")
-                    if (mUserDBRepository.isUsernameTaken(mUsername)
-                            && mUserDBRepository.isPasswordTaken(mPassword)) {
+
+                    if (isUserPassEntered()&&isUserPassTaken()) {
                         // Log.d("TAG", "user exits   ");
 
                         if (isMachUsernameAndPassword()) {
                             //Log.d("TAG", "username and password are correct");
                             generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_user_find);
-                            if (mUsername == "admin") {
+                            if (mUsername.equals("admin")) {
                                 startAdminActivity();
                             } else {
                                 startTaskListPagerActivity();
@@ -116,8 +115,7 @@ public class SignInFragment extends Fragment {
                                     R.string.snackbar_invalid_username_or_password);
                         }
 
-                    } else if (!mUserDBRepository.isUsernameTaken(mUsername)
-                            && !mUserDBRepository.isPasswordTaken(mPassword)) {
+                    } else if (haveNotAccount()) {
 
                         //  Log.d("TAG", "you have not account ");
                         generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_not_exits_user);
@@ -136,6 +134,22 @@ public class SignInFragment extends Fragment {
         });
     }
 
+    private boolean haveNotAccount() {
+        return !mUserDBRepository.isUsernameTaken(mUsername)
+                && !mUserDBRepository.isPasswordTaken(mPassword);
+    }
+
+    private boolean isUserPassTaken() {
+        return mUserDBRepository.isUsernameTaken(mUsername)
+                && mUserDBRepository.isPasswordTaken(mPassword);
+    }
+
+    private boolean isUserPassEntered() {
+        return !mUsername.isEmpty() && !mPassword.isEmpty()
+                && mUsername != null && mPassword != null;
+    }
+
+
     private void startTaskListPagerActivity() {
         Intent intent = TaskListPagerActivity.newIntent(getActivity(), mUsername);
         startActivity(intent);
@@ -146,20 +160,6 @@ public class SignInFragment extends Fragment {
         startActivity(intent);
     }
 
-    /*******************  ON ACTIVITY RESULT *****************/
-  /*  @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (resultCode == Activity.RESULT_CANCELED || data == null)
-            return;
-
-        if (requestCode == REQUEST_CODE_SIGN_UP) {
-
-        }
-    }
-*/
 
     /******************** GENERATE SNACK BAR *********************/
     private void generateSnackbar(View view, int stringId) {

@@ -10,15 +10,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.repository.TaskDBRepository;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.taskmanager2.controller.fragment.TaskListFragment.REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT;
@@ -29,6 +34,7 @@ public class AllTasksFragment extends Fragment {
     private RecyclerView mAllTaskRecyclerView;
     private AllTasksAdapter mAllTasksAdapter;
     private TaskDBRepository mTaskDBRepository;
+    private LinearLayout mLinearLayout;
 
 
     public AllTasksFragment() {
@@ -37,6 +43,7 @@ public class AllTasksFragment extends Fragment {
 
 
     public static AllTasksFragment newInstance() {
+        Log.d("TAG", "AllTasksFragment newInstance");
         AllTasksFragment fragment = new AllTasksFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -46,13 +53,15 @@ public class AllTasksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d("TAG", "AllTasksFragment onCreate");
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("TAG", "AllTasksFragment onCreateView");
+
         View view = inflater.inflate(R.layout.fragment_all_tasks, container, false);
 
         findView(view);
@@ -69,16 +78,13 @@ public class AllTasksFragment extends Fragment {
         mTaskDBRepository = TaskDBRepository.getInstance();
         List<Task> tasks = mTaskDBRepository.getTasks();
 
-        if (tasks.size() != 0 && tasks != null) {
+        if (mAllTasksAdapter != null) {
 
-            if (mAllTasksAdapter != null) {
-
-                mAllTasksAdapter.setTasks(tasks);
-                mAllTasksAdapter.notifyDataSetChanged();
-            } else {
-                mAllTasksAdapter = new AllTasksAdapter(tasks);
-                mAllTaskRecyclerView.setAdapter(mAllTasksAdapter);
-            }
+            mAllTasksAdapter.setTasks(tasks);
+            mAllTasksAdapter.notifyDataSetChanged();
+        } else {
+            mAllTasksAdapter = new AllTasksAdapter(tasks);
+            mAllTaskRecyclerView.setAdapter(mAllTasksAdapter);
         }
     }
 
@@ -88,6 +94,7 @@ public class AllTasksFragment extends Fragment {
 
     private void findView(View view) {
         mAllTaskRecyclerView = view.findViewById(R.id.recycler_view_all_tasks);
+        mLinearLayout = view.findViewById(R.id.linear_layout_all_tasks);
     }
 
 
@@ -158,10 +165,18 @@ public class AllTasksFragment extends Fragment {
 
         public void bindView(Task task) {
             mTask = task;
+            if (task != null) {
+                mTextViewTitle.setText(task.getTitle());
+                mTextViewDate.setText(getStringFormatDate(task.getDate()));
+                if (!task.getTitle().isEmpty()) {
 
-            mTextViewTitle.setText(task.getTitle());
-            mTextViewDate.setText(task.getDate().toString());
-            mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
+                    mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
+                }
+            }else {
+                generateSnackbar(mLinearLayout,R.string.snackbar_not_exits_any_task);
+            }
+
+
         }
 
         private void findViews(@NonNull View itemView) {
@@ -170,6 +185,11 @@ public class AllTasksFragment extends Fragment {
             mTextViewFirstChar = itemView.findViewById(R.id.text_view_first_char);
         }
 
+    }
+
+    /************************* GET STRING FORMAT DATE ******************/
+    private String getStringFormatDate(Date date) {
+        return new SimpleDateFormat("yyy/MM/dd  " + "HH:mm:ss").format(date);
     }
 
 
@@ -188,6 +208,15 @@ public class AllTasksFragment extends Fragment {
         }
 
     }
+
+    /******************** GENERATE SNACK BAR *********************/
+    private void generateSnackbar(View view, int stringId) {
+        Snackbar snackbar = Snackbar
+                .make(view,
+                        stringId, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
 
     @Override
     public void onPause() {

@@ -11,19 +11,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.taskmanager2.R;
+import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.User;
+import com.example.taskmanager2.repository.TaskDBRepository;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class AllUsersFragment extends Fragment {
     private RecyclerView mAllUsersRecyclerView;
     private UserDBRepository mUserDBRepository;
+    private TaskDBRepository mTaskDBRepository;
     private AllUsersAdapter mAllUsersAdapter;
+    private LinearLayout mLinearLayout;
 
     public AllUsersFragment() {
         // Required empty public constructor
@@ -31,7 +40,7 @@ public class AllUsersFragment extends Fragment {
 
 
     public static AllUsersFragment newInstance() {
-        Log.d("TAG","all users fragment");
+        Log.d("TAG", "all users fragment");
         AllUsersFragment fragment = new AllUsersFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -41,14 +50,15 @@ public class AllUsersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTaskDBRepository = TaskDBRepository.getInstance();
 
     }
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("TAG", "AllUsersFrgament===onCreateView");
         View view = inflater.inflate(R.layout.fragment_all_users, container, false);
 
         findView(view);
@@ -65,25 +75,23 @@ public class AllUsersFragment extends Fragment {
         mUserDBRepository = UserDBRepository.getInstance();
         List<User> users = mUserDBRepository.getUsers();
 
-        if (users.size() != 0 && users != null) {
+        if (mAllUsersAdapter != null) {
 
-            if (mAllUsersAdapter != null) {
-
-                mAllUsersAdapter.setUsers(users);
-                mAllUsersAdapter.notifyDataSetChanged();
-            } else {
-                mAllUsersAdapter = new AllUsersAdapter(users);
-                mAllUsersRecyclerView.setAdapter(mAllUsersAdapter);
-            }
+            mAllUsersAdapter.setUsers(users);
+            mAllUsersAdapter.notifyDataSetChanged();
+        } else {
+            mAllUsersAdapter = new AllUsersAdapter(users);
+            mAllUsersRecyclerView.setAdapter(mAllUsersAdapter);
         }
-    }
-
-    private void initView() {
-        mAllUsersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private void findView(View view) {
         mAllUsersRecyclerView = view.findViewById(R.id.recycler_view_all_users);
+        mLinearLayout = view.findViewById(R.id.linear_layout_all_users);
+    }
+
+    private void initView() {
+        mAllUsersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
 
@@ -138,7 +146,9 @@ public class AllUsersFragment extends Fragment {
             mImageViewDeleteUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    deleteUserTasks();
                     mUserDBRepository.deleteUser(mUser);
+
                     updateList();
                 }
             });
@@ -146,12 +156,29 @@ public class AllUsersFragment extends Fragment {
 
         }
 
+        private void deleteUserTasks() {
+            List<Task> tasks = mUser.getTasks();
+            if (tasks != null) {
+                for (int i = 0; i < tasks.size(); i++) {
+                    mTaskDBRepository.deleteTask(tasks.get(i));
+                }
+            }
+        }
+
         public void bindView(User user) {
             mUser = user;
-            mTextViewUsername.setText(user.getUsername());
-            SignUpDate.setText(user.getSignUpDate().toString());
-            if (user.getTasks().size() != 0 && user.getTasks() != null)
-                mTextViewCountUserTasks.setText(user.getTasks().size());
+            if (user != null) {
+
+                mTextViewUsername.setText(user.getUsername());
+                SignUpDate.setText("SignUp date :" + getStringFormatDate(user.getSignUpDate()));
+                if (user.getTasks() != null) {
+                    mTextViewCountUserTasks.setText(user.getUsername() + " have " + user.getTasks().size());
+                }
+            } else {
+                generateSnackbar(mLinearLayout, R.string.snackbar_not_exits_user);
+                Toast.makeText(getActivity(), "there is no user exits", Toast.LENGTH_SHORT).show();
+
+            }
         }
 
         private void findViews(@NonNull View itemView) {
@@ -161,6 +188,20 @@ public class AllUsersFragment extends Fragment {
             mImageViewDeleteUser = itemView.findViewById(R.id.img_view_delete_user);
         }
 
+    }
+
+
+    /************************* GET STRING FORMAT DATE ******************/
+    private String getStringFormatDate(Date date) {
+        return new SimpleDateFormat("yyy/MM/dd  " + "HH:mm:ss").format(date);
+    }
+
+    /******************** GENERATE SNACK BAR *********************/
+    private void generateSnackbar(View view, int stringId) {
+        Snackbar snackbar = Snackbar
+                .make(view,
+                        stringId, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
 

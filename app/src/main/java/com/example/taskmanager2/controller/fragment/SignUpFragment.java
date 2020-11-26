@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.activity.AdminActivity;
-import com.example.taskmanager2.controller.activity.SignInActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.model.User;
 import com.example.taskmanager2.repository.UserDBRepository;
@@ -84,54 +83,59 @@ public class SignUpFragment extends Fragment {
     /************************** SET LISTENER ************************/
 
     private void setListener() {
-        mButtonSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Log.d("TAG", "sign up fragment signup listener ");
-                mUsername = mEditTextUsername.getText().toString().trim();
-                mPassword = mEditTextPassword.getText().toString().trim();
-                if (mUsername != "" && mPassword != ""
-                        && mUsername != null && mPassword != null) {
-                    if (mUserDBRepository.isUsernameTaken(mUsername)) {
 
-                        //Log.d("TAG", "username is taken ");
-                        generateSnackbar(mLinearLayoutSignup, R.string.snackbar_is_taken_username);
-                    } else {
-                        //  Log.d("TAG", "pass is taken");
-                        if (mUserDBRepository.isPasswordTaken(mPassword))
-                            generateSnackbar(mLinearLayoutSignup, R.string.snackbar_is_taken_password);
-                        else {
-                            // Log.d("TAG", "valid usernam and pass . create user");
-                            signUpUser(mUsername, mPassword);
-                            /*Intent intent = SignInActivity.newIntent(getActivity());
-                            startActivity(intent);
-                         */
-                            Intent intent =
-                                    TaskListPagerActivity.newIntent(getActivity(), mUsername);
-                            startActivity(intent);
-                        }
-                    }
-
-                }
-            }
-        });
         mButtonSignUpAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mUsername = "admin";
                 mEditTextUsername.setText("admin");
-                generateSnackbar(mLinearLayoutSignup, R.string.snackbar_enter_admin_password);
-                mPassword = mEditTextPassword.getText().toString();
-
-                if (!mPassword.isEmpty() && mPassword != null) {
-                    Log.d("TAG","i am admin password is not null :"+mPassword);
-                    signUpUser(mUsername, mPassword);
-                    Intent intent = AdminActivity.newIntent(getActivity());
-                    startActivity(intent);
-
-                }
             }
         });
+        mButtonSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Log.d("TAG", "sign up fragment signup listener ");
+                mUsername = mEditTextUsername.getText().toString();
+                mPassword = mEditTextPassword.getText().toString();
+                if (isUserPassEntered()) {
+                    if (!isTakenUserPass()) {
+                        signUpUser(mUsername, mPassword);
+                        if(mUsername.equals("admin"))
+                            startAdminActivity();
+                        else
+                        startPagerActivity();
+                    } else {
+                        generateSnackbar(
+                                mLinearLayoutSignup,R.string.snackbar_is_taken_username_or_password);
+                    }
+
+                }
+                else
+                    generateSnackbar(
+                            mLinearLayoutSignup,R.string.snackbar_username_or_password_is_empty);
+            }
+        });
+    }
+
+    private void startAdminActivity() {
+        Intent intent = AdminActivity.newIntent(getActivity());
+        startActivity(intent);
+    }
+
+    private boolean isTakenUserPass() {
+        return mUserDBRepository.isUsernameTaken(mUsername) ||
+                mUserDBRepository.isPasswordTaken(mPassword);
+    }
+
+    private boolean isUserPassEntered() {
+        return !mUsername.isEmpty() && !mPassword.isEmpty()
+                && mUsername != null && mPassword != null;
+    }
+
+    private void startPagerActivity() {
+        Intent intent =
+                TaskListPagerActivity.newIntent(getActivity(), mUsername);
+        startActivity(intent);
     }
 
     private void signUpUser(String username, String password) {

@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskManager">
-        <activity android:name=".controller.activity.AdminActivity"></activity>
+        <activity android:name=".controller.activity.AllUsersActivity"></activity>
+        <activity android:name=".controller.activity.AllTasksActivity" />
+        <activity android:name=".controller.activity.AdminActivity" />
         <activity android:name=".controller.activity.SingleFragmentActivity" />
         <activity android:name=".controller.activity.SignUpActivity" />
         <activity android:name=".controller.activity.TaskListPagerActivity" />
