@@ -24,6 +24,7 @@ import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.repository.TaskDBRepository;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,23 +88,7 @@ public class TaskListPagerActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-           /* mTaskListFragments=new ArrayList<>();
 
-            TaskSate state = TaskSate.DONE;
-            switch (position) {
-                case 0:
-                    state = TaskSate.TODO;
-                    break;
-                case 1:
-                    state = TaskSate.DOING;
-                    break;
-                case 2:
-                    state = TaskSate.DONE;
-                    break;
-            }
-            TaskListFragment taskListFragment= TaskListFragment.newInstance(mUsername, state);
-            mTaskListFragments.add(taskListFragment);
-          */
             mTaskListFragments.add(TaskListFragment.newInstance(mUsername, TaskState.TODO));
             mTaskListFragments.add(TaskListFragment.newInstance(mUsername, TaskState.DOING));
             mTaskListFragments.add(TaskListFragment.newInstance(mUsername, TaskState.DONE));
@@ -115,30 +100,8 @@ public class TaskListPagerActivity extends AppCompatActivity {
 
     /************************ SET TAB VIEW *******************************/
     private void setTabView() {
-       /* TabLayoutMediator tabLayoutMediator = new TabLayoutMediator
-                (mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
-                    @Override
-                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                        switch (position) {
-                            case 0: {
-                                tab.setText("TODO");
-                                break;
-                            }
-                            case 1: {
-                                tab.setText("DOING");
-                                break;
-                            }
-                            case 2: {
-                                tab.setText("DONE");
-                                break;
-                            }
-                        }
-                    }
-                });
 
-        tabLayoutMediator.attach();
-
-        mViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+       mViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
 
             @Override
             public void onPageSelected(int position) {
@@ -146,7 +109,7 @@ public class TaskListPagerActivity extends AppCompatActivity {
                mTaskListFragments.get(position).updateList();
             }
 
-        });*/
+        });
 
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
