@@ -34,8 +34,6 @@ public class TaskListPagerActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager2;
     private String mUsername;
-    private UserDBRepository mUserDBRepository;
-    private TaskDBRepository mTaskDBRepository;
     private ArrayList<TaskListFragment> mTaskListFragments = new ArrayList<>();
 
     /******************* NEW INTENT *********************/
@@ -53,97 +51,12 @@ public class TaskListPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list_pager);
         mUsername = getIntent().getStringExtra(EXTRA_USERNAME);
-        mUserDBRepository = UserDBRepository.getInstance();
-        mTaskDBRepository = TaskDBRepository.getInstance();
 
         findViews();
         initViews();
 
     }
 
-
-    /****************** ON CREATE OPTION MENU ********************/
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_list_pager_activity, menu);
-        return true;
-    }
-
-    /**************** ON OPTION MENU SELECTED ****************/
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_logout:
-                buildLogoutAlertDialog();
-                return true;
-            case R.id.menu_item_delete_all_tasks:
-                buildDeleteUserTasksAlertDialog();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-
-    /*************** BUILD LOGOUT USER ALERT DIALOG *****************/
-
-
-    private void buildLogoutAlertDialog() {
-        Log.d("TAG","Exit Alertdialog");
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
-                .setMessage("Are you sure to exit ?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Intent intent = SignInActivity.newIntent(TaskListPagerActivity.this);
-                        startActivity(intent);
-
-                    }
-                })
-                .setNegativeButton("No", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    /*************** BUILD DELETE USER TASKS ALERT DIALOG *****************/
-    private void buildDeleteUserTasksAlertDialog() {
-        Log.d("TAG","DeleteAll Alertdialog");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
-                .setMessage("Are you sure to delete all ?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteUserTasks();
-                    }
-                })
-                .setNegativeButton("No", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-
-    /********************** DELETE USER TASKS *******************/
-    private void deleteUserTasks() {
-        List<TaskState> taskStates = new ArrayList<TaskState>();
-        taskStates.add(TaskState.DONE);
-        taskStates.add(TaskState.DOING);
-        taskStates.add(TaskState.TODO);
-        for (int i = 0; i < 3; i++) {
-            List<Task> userTasks = mUserDBRepository.getTasks(mUsername, taskStates.get(i));
-            if (userTasks.size() != 0 && userTasks != null) {
-
-                for (int j = 0; j < userTasks.size(); j++) {
-
-                    mTaskDBRepository.deleteTask(userTasks.get(j));
-                }
-            }
-        }
-    }
     /********************* FIND VIEWS *********************/
     private void findViews() {
         mTabLayout = findViewById(R.id.tab_layout_task_list);

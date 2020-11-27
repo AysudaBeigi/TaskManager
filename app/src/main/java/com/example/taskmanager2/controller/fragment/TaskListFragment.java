@@ -1,6 +1,8 @@
 package com.example.taskmanager2.controller.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,18 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.taskmanager2.R;
+import com.example.taskmanager2.controller.activity.SignInActivity;
+import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
+import com.example.taskmanager2.repository.TaskDBRepository;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +51,7 @@ public class TaskListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private UserDBRepository mUserDBRepository;
+    private TaskDBRepository mTaskDBRepository;
     private FloatingActionButton mButtonAddTask;
     private ShapeableImageView mImgEmptyAdd;
     private MaterialTextView mTextViewEmptyAdd;
@@ -73,6 +83,8 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mUsername = getArguments().getString(ARGS_USERNAME);
         mState = (TaskState) getArguments().getSerializable(ARGS_STATE);
+        setHasOptionsMenu(true);
+        mTaskDBRepository=TaskDBRepository.getInstance();
         Log.d("TAG", "TLF on create  ");
 
 
@@ -299,6 +311,87 @@ public class TaskListFragment extends Fragment {
 
 
     }
+
+
+    /****************** ON CREATE OPTION MENU ********************/
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_task_list,menu);
+    }
+
+    /**************** ON OPTION MENU SELECTED ****************/
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_logout:
+                buildLogoutAlertDialog();
+                return true;
+            case R.id.menu_item_delete_all_tasks:
+                buildDeleteUserTasksAlertDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    /*************** BUILD LOGOUT USER ALERT DIALOG *****************/
+
+
+    private void buildLogoutAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("Are you sure to exit ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = SignInActivity.newIntent(getActivity());
+                        startActivity(intent);
+
+                    }
+                })
+                .setNegativeButton("No", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /*************** BUILD DELETE USER TASKS ALERT DIALOG *****************/
+    private void buildDeleteUserTasksAlertDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("Are you sure to delete all tasks in this state ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        deleteUserTasks();
+                        updateList();
+                    }
+                })
+                .setNegativeButton("No", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    /********************** DELETE USER TASKS *******************/
+    private void deleteUserTasks() {
+            List<Task> userTasks = mUserDBRepository.getTasks(mUsername,mState);
+            if( userTasks != null) {
+
+                for (int j = 0; j < userTasks.size(); j++) {
+
+                    mTaskDBRepository.deleteTask(userTasks.get(j));
+
+                }
+            }
+
+    }
+
+
+
 
     @Override
     public void onPause() {
