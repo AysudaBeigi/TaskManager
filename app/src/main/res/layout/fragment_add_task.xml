@@ -30,7 +30,7 @@
             android:textSize="20sp" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text_view_date"
+            android:id="@+id/text_view_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -69,31 +69,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:text="Cancel"
-                android:visibility="invisible"
-                app:rippleColor="@color/blue_35" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:text="Save"
-                android:visibility="invisible"
-                app:rippleColor="@color/blue_35" />
-        </LinearLayout>
 
     </LinearLayout>
 

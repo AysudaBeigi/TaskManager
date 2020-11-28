@@ -12,7 +12,7 @@ import com.example.taskmanager2.R;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
-
+    /****************************** ON CREATE ***************************/
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +28,9 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                     commit();
         }
     }
+
+    /***************** GET FRAGMENT *****************/
+
 
     public abstract Fragment getFragment();
 }

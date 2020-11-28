@@ -70,7 +70,7 @@ public class AddTaskFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         mUsername = getArguments().getString(ARGS_USERNAME);
         mSate = (TaskState) getArguments().getSerializable(ARGS_STATE);
-        mTaskDBRepository = TaskDBRepository.getInstance();
+        mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
         mTask = new Task(mUsername, mSate);
         Log.d("TAG", "AddTaskFragment on create " + mTask.getUsername());
 

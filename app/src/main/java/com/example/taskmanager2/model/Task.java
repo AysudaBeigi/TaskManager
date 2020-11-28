@@ -24,27 +24,23 @@ public class Task  implements Serializable {
         mUUID=UUID.randomUUID();
     }
 
-    public Task(String title, String description, Date date, TaskState sate, String username) {
+    public Task(UUID uuid, String username,
+                String title, String description, Date date, TaskState sate) {
+        mUUID=uuid;
+        mUsername = username;
         mTitle = title;
         mDescription = description;
         mDate = date;
-        mUUID=UUID.randomUUID();
         mSate = sate;
-        mUsername = username;
 
     }
-
-    public Task(String description, Date date, TaskState sate, String username) {
+    /*public Task(String description, Date date, TaskState sate, String username) {
         mDescription = description;
         mDate = date;
         mUUID=UUID.randomUUID();
         mSate = sate;
         mUsername = username;
-    }
-
-
-
-
+    }*/
 
     /******************* SETTER ************************/
     public void setSate(TaskState sate) {
@@ -75,7 +71,8 @@ public class Task  implements Serializable {
         int year = calendar.get(Calendar.YEAR);
         int monthOfYear = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.set(year, monthOfYear, dayOfMonth, mDate.getHours(), mDate.getMinutes(), mDate.getSeconds());
+        calendar.set(year, monthOfYear, dayOfMonth,
+                mDate.getHours(), mDate.getMinutes(), mDate.getSeconds());
         mDate = calendar.getTime();
 
     }
@@ -108,6 +105,7 @@ public class Task  implements Serializable {
     public UUID getUUID() {
         return mUUID;
     }
+
 
     public String getUsername() {
         return mUsername;

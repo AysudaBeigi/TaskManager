@@ -3,6 +3,7 @@ package com.example.taskmanager2.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import com.example.taskmanager2.database.TaskManagerDBSchema.UserTable.UserCols;
@@ -10,9 +11,7 @@ import com.example.taskmanager2.database.TaskManagerDBSchema.TaskTable.TaskCols;
 
 public class TaskManagerDBHelper extends SQLiteOpenHelper {
 
-    public TaskManagerDBHelper(
-            @Nullable Context context, @Nullable String name,
-            @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public TaskManagerDBHelper(@Nullable Context context) {
 
         super(context, TaskManagerDBSchema.NAME, null, TaskManagerDBSchema.VERSION);
     }
@@ -22,35 +21,32 @@ public class TaskManagerDBHelper extends SQLiteOpenHelper {
 
         generateUserQuery(db);
 
-        generateTaskquery(db);
+        generateTaskQuery(db);
 
 
     }
 
-    private void generateTaskquery(SQLiteDatabase db) {
-        StringBuilder taskSbQuery=new StringBuilder();
-        taskSbQuery.append("CREATE_TABLE"+ TaskManagerDBSchema.UserTable.NAME+"(");
-        taskSbQuery.append(TaskCols.ID+"INTEGER PRIMARY KEY AUTOINCREMENT,");
-        taskSbQuery.append(TaskCols.UUID+"  TEXT NOT NULL ,");
-        taskSbQuery.append(TaskCols.USERNAME+"  TEXT NOT NULL ," );
-        taskSbQuery.append(TaskCols.TITLE+" TEXT  ,");
-        taskSbQuery.append(TaskCols.DESCRIPTION+"TEXT ,");
-        taskSbQuery.append(TaskCols.DATE+"TEXT NOT NULL,");
-        taskSbQuery.append(TaskCols.STATE+"TEXT NOT NULL,");
-        taskSbQuery.append(");");
-        db.execSQL(taskSbQuery.toString());
+    private void generateTaskQuery(SQLiteDatabase db) {
+        Log.d("TAG","generateTaskQuery");
+        db.execSQL( "CREATE TABLE " + TaskManagerDBSchema.TaskTable.NAME + "(" +
+                TaskCols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                TaskCols.UUID + "  TEXT NOT NULL ," +
+                TaskCols.USERNAME + "  TEXT NOT NULL ," +
+                TaskCols.TITLE + " TEXT  ," +
+                TaskCols.DESCRIPTION + " TEXT ," +
+                TaskCols.DATE + " TEXT NOT NULL," +
+                TaskCols.STATE + " TEXT NOT NULL );");
     }
 
     private void generateUserQuery(SQLiteDatabase db) {
-        StringBuilder userSbQuery = new StringBuilder();
-        userSbQuery.append("CREATE_TABLE" + TaskManagerDBSchema.UserTable.NAME + "(");
-        userSbQuery.append(UserCols.ID + "INTEGER PRIMARY KEY AUTOINCREMENT,");
-        userSbQuery.append(UserCols.UUID + "  TEXT NOT NULL ,");
-        userSbQuery.append(UserCols.USERNAME + "  TEXT NOT NULL ,");
-        userSbQuery.append(UserCols.PASSWORD + " TEXT NOT NULL ,");
-        userSbQuery.append(UserCols.SIGN_UP_DATE + " TEXT NOT NULL  ,");
-        userSbQuery.append(");");
-        db.execSQL(userSbQuery.toString());
+        Log.d("TAG","generateUserQuery");
+
+        db.execSQL("CREATE TABLE " + TaskManagerDBSchema.UserTable.NAME + "(" +
+                UserCols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                UserCols.UUID + "  TEXT NOT NULL ," +
+                UserCols.USERNAME + "  TEXT NOT NULL ," +
+                UserCols.PASSWORD + " TEXT NOT NULL ," +
+                UserCols.SIGN_UP_DATE + " TEXT NOT NULL );");
     }
 
     @Override

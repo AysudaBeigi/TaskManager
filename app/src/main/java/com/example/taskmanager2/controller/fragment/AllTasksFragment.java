@@ -75,7 +75,7 @@ public class AllTasksFragment extends Fragment {
 
     private void updateList() {
 
-        mTaskDBRepository = TaskDBRepository.getInstance();
+        mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
         List<Task> tasks = mTaskDBRepository.getTasks();
 
         if (mAllTasksAdapter != null) {

@@ -29,6 +29,7 @@ public class User {
         return mSignUpDate;
     }
 
+
     public void setUsername(String username) {
         mUsername = username;
     }
@@ -47,4 +48,14 @@ public class User {
         mUUID=UUID.randomUUID();
         mSignUpDate=new Date();
     }
+    public User(UUID uuid,String username,String password,Date signUpDate){
+        mUUID=uuid;
+        mUsername=username;
+        mPassword=password;
+        mSignUpDate=signUpDate;
+    }
+
+
+
+
 }

@@ -61,7 +61,7 @@ public class SignInFragment extends Fragment {
 
         Log.d("TAG", "this is SignIn on create   ");
 
-        mUserDBRepository = UserDBRepository.getInstance();
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
 
     }
 

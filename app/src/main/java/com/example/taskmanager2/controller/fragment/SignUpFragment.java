@@ -56,7 +56,7 @@ public class SignUpFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Log.d("TAG", "sign up fragment onCreate ");
 
-        mUserDBRepository = UserDBRepository.getInstance();
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
     }
 
     /******************* ON CREATE VIEW ********************/

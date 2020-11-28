@@ -17,6 +17,7 @@ public class SignInActivity extends SingleFragmentActivity {
         return intent;
 
     }
+    /***************** GET FRAGMENT *****************/
 
 
     @Override

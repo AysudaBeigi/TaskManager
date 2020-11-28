@@ -13,6 +13,7 @@ import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.fragment.SignUpFragment;
 
 public class SignUpActivity extends SingleFragmentActivity {
+    /******************* NEW INTENT *********************/
 
     public static Intent newIntent(Context context) {
         Log.d("TAG","this is SignUp activity  ");
@@ -22,6 +23,7 @@ public class SignUpActivity extends SingleFragmentActivity {
         return intent;
     }
 
+    /***************** GET FRAGMENT *****************/
 
     @Override
     public Fragment getFragment() {

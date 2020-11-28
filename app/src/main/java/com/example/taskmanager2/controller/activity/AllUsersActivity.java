@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.example.taskmanager2.controller.fragment.AllUsersFragment;
 
 public class AllUsersActivity extends SingleFragmentActivity {
+    /******************* NEW INTENT *********************/
 
     public static Intent newIntent(Context context) {
 
@@ -17,6 +18,8 @@ public class AllUsersActivity extends SingleFragmentActivity {
         return intent;
 
     }
+    /***************** GET FRAGMENT *****************/
+
     @Override
     public Fragment getFragment() {
         return AllUsersFragment.newInstance();

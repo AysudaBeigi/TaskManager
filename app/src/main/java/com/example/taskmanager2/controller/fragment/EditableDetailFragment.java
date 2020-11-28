@@ -73,7 +73,7 @@ public class EditableDetailFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mTask = (Task) getArguments().getSerializable(ARGS_TASK);
-        mTaskDBRepository = TaskDBRepository.getInstance();
+        mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
     }
 
     /************************** ON CREATE DIALOG ******************/

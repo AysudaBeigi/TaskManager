@@ -50,7 +50,7 @@ public class AllUsersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTaskDBRepository = TaskDBRepository.getInstance();
+        mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
 
     }
 
@@ -72,7 +72,7 @@ public class AllUsersFragment extends Fragment {
 
     private void updateList() {
 
-        mUserDBRepository = UserDBRepository.getInstance();
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
         List<User> users = mUserDBRepository.getUsers();
 
         if (mAllUsersAdapter != null) {

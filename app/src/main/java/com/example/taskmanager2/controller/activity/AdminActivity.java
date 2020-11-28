@@ -20,12 +20,13 @@ import com.example.taskmanager2.controller.fragment.AllUsersFragment;
 import com.google.android.material.button.MaterialButton;
 
 public class AdminActivity extends SingleFragmentActivity {
+    /*************NEW INTENT *************************/
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, AdminActivity.class);
+        return intent;
+    }
 
-    public static Intent newIntent(Context context){
-       Intent intent=new Intent(context,AdminActivity.class);
-       return intent;
-   }
-
+    /***************** GET FRAGMENT *****************/
 
     @Override
     public Fragment getFragment() {

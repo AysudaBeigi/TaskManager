@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.activity.SignInActivity;
-import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.repository.TaskDBRepository;
@@ -32,7 +31,6 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -84,7 +82,7 @@ public class TaskListFragment extends Fragment {
         mUsername = getArguments().getString(ARGS_USERNAME);
         mState = (TaskState) getArguments().getSerializable(ARGS_STATE);
         setHasOptionsMenu(true);
-        mTaskDBRepository=TaskDBRepository.getInstance();
+        mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
         Log.d("TAG", "TLF on create  ");
 
 
@@ -112,7 +110,7 @@ public class TaskListFragment extends Fragment {
 
         mRecyclerView = view.findViewById(R.id.recycler_view_task_list);
         mImgEmptyAdd = view.findViewById(R.id.img_view_empty_add);
-        mTextViewEmptyAdd = view.findViewById(R.id.text_view_date);
+        mTextViewEmptyAdd = view.findViewById(R.id.text_view_empty_add);
         mButtonAddTask = view.findViewById(R.id.btn_add);
     }
 
@@ -120,7 +118,7 @@ public class TaskListFragment extends Fragment {
     private void initView() {
         Log.d("TAG", "TLF init view ");
 
-        mUserDBRepository = UserDBRepository.getInstance();
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateList();
 
@@ -144,28 +142,29 @@ public class TaskListFragment extends Fragment {
 
     /************************* UPDATE LIST *********************/
     public void updateList() {
-        // if (mUserDBRepository != null) {
-        Log.d("TAG", "update List TLF");
+        if (mUserDBRepository != null) {
+            Log.d("TAG", "update List TLF");
 
-        mUserDBRepository = UserDBRepository.getInstance();
-        List<Task> userTasks = mUserDBRepository.getTasks(mUsername, mState);
-        //if (userTasks.size() != 0 && userTasks != null) {
-        goneEmptyAddViews();
+            mUserDBRepository = UserDBRepository.getInstance(getActivity());
+            List<Task> userTasks = mUserDBRepository.getTasks(mUsername, mState);
+            Log.d("TAG", "size of tasks is " + userTasks.size());
+            goneEmptyAddViews();
 
-        if (mTaskListAdapter != null) {
-            Log.d("TAG", "update List taskAdapter is not null");
+            if (mTaskListAdapter != null) {
+                Log.d("TAG", "update List taskAdapter is not null");
 
-            mTaskListAdapter.setTasks(userTasks);
-            mTaskListAdapter.notifyDataSetChanged();
-        } else {
-            Log.d("TAG", "update List taskAdapter is null");
+                mTaskListAdapter.setTasks(userTasks);
+                mTaskListAdapter.notifyDataSetChanged();
+            } else {
+                Log.d("TAG", "update List taskAdapter is null");
 
-            mTaskListAdapter = new TaskListAdapter(userTasks);
-            mRecyclerView.setAdapter(mTaskListAdapter);
-        }
+                mTaskListAdapter = new TaskListAdapter(userTasks);
+                mRecyclerView.setAdapter(mTaskListAdapter);
+            }
 
-        if (userTasks.size() == 0 || userTasks == null) {
-            visibleEmptyAddViews();
+            if (userTasks.size() == 0 || userTasks == null) {
+                visibleEmptyAddViews();
+            }
         }
     }
 
@@ -271,7 +270,7 @@ public class TaskListFragment extends Fragment {
                 mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
 
             }
- }
+        }
 
         private void findViews(@NonNull View itemView) {
 
@@ -297,6 +296,7 @@ public class TaskListFragment extends Fragment {
             case REQUEST_CODE_ADD_TASK_FRAGMENT:
                 Log.d("TAG", "TaskListF == onActivityResult == requestCode AddTask");
                 mTask = (Task) data.getSerializableExtra(AddTaskFragment.EXTRA_TASK);
+                Log.d("TAG", "added task title is :" + mTask.getTitle());
                 updateList();
 
                 break;
@@ -316,7 +316,7 @@ public class TaskListFragment extends Fragment {
     /****************** ON CREATE OPTION MENU ********************/
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_task_list,menu);
+        inflater.inflate(R.menu.menu_task_list, menu);
     }
 
     /**************** ON OPTION MENU SELECTED ****************/
@@ -378,19 +378,17 @@ public class TaskListFragment extends Fragment {
 
     /********************** DELETE USER TASKS *******************/
     private void deleteUserTasks() {
-            List<Task> userTasks = mUserDBRepository.getTasks(mUsername,mState);
-            if( userTasks != null) {
+        List<Task> userTasks = mUserDBRepository.getTasks(mUsername, mState);
+        if (userTasks != null) {
 
-                for (int j = 0; j < userTasks.size(); j++) {
+            for (int j = 0; j < userTasks.size(); j++) {
 
-                    mTaskDBRepository.deleteTask(userTasks.get(j));
+                mTaskDBRepository.deleteTask(userTasks.get(j));
 
-                }
             }
+        }
 
     }
-
-
 
 
     @Override
