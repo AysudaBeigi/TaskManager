@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+    <color name="violet_46">#7a046b</color>
+    <color name="violet_08">#e008af</color>
+
+    <color name="violet_20">#FF6200EE</color>
+    <color name="violet_03">#FF3700B3</color>
+
     <color name="purple_86">#FFBB86FC</color>
-    <color name="purple_75">#f69775</color>
-    <color name="purple_89">#ef6189</color>
+
+    <color name="pink_75">#f69775</color>
+    <color name="pink_89">#ef6189</color>
 
     <color name="peach_54">#ffe5b4</color>
     <color name="peach_86">#ffe8d6</color>
@@ -12,9 +21,6 @@
 
     <color name="orange_92">#ff9b22</color>
 
-
-    <color name="violet_20">#FF6200EE</color>
-    <color name="violet_03">#FF3700B3</color>
 
     <color name="blue_35">#FF03DAC5</color>
     <color name="blue_86">#FF018786</color>

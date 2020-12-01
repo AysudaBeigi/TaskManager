@@ -95,9 +95,7 @@ public class TimePickerFragment extends DialogFragment {
     /******************************** INIT VIEWS *******************************/
     private void initViews() {
 
-/*
-
-            Calendar calendar = Calendar.getInstance();
+            /*Calendar calendar = Calendar.getInstance();
             calendar.setTime(mTaskNowDate);
 
             if (Build.VERSION.SDK_INT < 23) {
@@ -106,8 +104,7 @@ public class TimePickerFragment extends DialogFragment {
             } else {
                 mTimePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
                 mTimePicker.setMinute(calendar.get(Calendar.MINUTE));
-            }
-*/
+            }*/
 
         Log.d("TAG", "TimePickerFragment initViews   "+mTaskNowDate.toString());
 

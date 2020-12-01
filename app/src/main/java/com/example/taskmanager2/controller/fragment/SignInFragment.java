@@ -1,12 +1,9 @@
 package com.example.taskmanager2.controller.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -98,7 +95,7 @@ public class SignInFragment extends Fragment {
                 mUsername = mEditTextUsername.getText().toString();
                 mPassword = mEditTextPassword.getText().toString();
 
-                    if (isUserPassEntered()&&isUserPassTaken()) {
+                    if (isUserPassEntered()&& isUsernameTaken()) {
                         // Log.d("TAG", "user exits   ");
 
                         if (isMachUsernameAndPassword()) {
@@ -135,13 +132,11 @@ public class SignInFragment extends Fragment {
     }
 
     private boolean haveNotAccount() {
-        return !mUserDBRepository.isUsernameTaken(mUsername)
-                && !mUserDBRepository.isPasswordTaken(mPassword);
+        return !isUsernameTaken(mUsername) ;
     }
 
-    private boolean isUserPassTaken() {
-        return mUserDBRepository.isUsernameTaken(mUsername)
-                && mUserDBRepository.isPasswordTaken(mPassword);
+    private boolean isUsernameTaken() {
+        return isUsernameTaken(mUsername) ;
     }
 
     private boolean isUserPassEntered() {
@@ -177,6 +172,15 @@ public class SignInFragment extends Fragment {
         return false;
 
     }
+
+    /************************** IS USERNAME TAKEN ***********************/
+    public boolean isUsernameTaken(String username) {
+        if (mUserDBRepository.getUser(username) != null)
+            return true;
+        return false;
+    }
+
+
 
 
 }

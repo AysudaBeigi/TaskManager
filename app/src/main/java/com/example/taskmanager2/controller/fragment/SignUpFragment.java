@@ -14,11 +14,16 @@ import android.widget.LinearLayout;
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.activity.AdminActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
+import com.example.taskmanager2.database.TaskManagerDBSchema;
+import com.example.taskmanager2.database.UserCursorWrapper;
 import com.example.taskmanager2.model.User;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SignUpFragment extends Fragment {
@@ -100,19 +105,18 @@ public class SignUpFragment extends Fragment {
                 if (isUserPassEntered()) {
                     if (!isTakenUserPass()) {
                         signUpUser(mUsername, mPassword);
-                        if(mUsername.equals("admin"))
+                        if (mUsername.equals("admin"))
                             startAdminActivity();
                         else
-                        startPagerActivity();
+                            startPagerActivity();
                     } else {
                         generateSnackbar(
-                                mLinearLayoutSignup,R.string.snackbar_is_taken_username_or_password);
+                                mLinearLayoutSignup, R.string.snackbar_is_taken_username_or_password);
                     }
 
-                }
-                else
+                } else
                     generateSnackbar(
-                            mLinearLayoutSignup,R.string.snackbar_username_or_password_is_empty);
+                            mLinearLayoutSignup, R.string.snackbar_username_or_password_is_empty);
             }
         });
     }
@@ -123,8 +127,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private boolean isTakenUserPass() {
-        return mUserDBRepository.isUsernameTaken(mUsername) ||
-                mUserDBRepository.isPasswordTaken(mPassword);
+        return isUsernameTaken(mUsername) || isPasswordTaken(mPassword);
     }
 
     private boolean isUserPassEntered() {
@@ -147,9 +150,36 @@ public class SignUpFragment extends Fragment {
     /********************* GENERATE SNACK BAR ********************/
     private void generateSnackbar(View view, int stringId) {
         Snackbar snackbar = Snackbar
-                .make(view,
-                        stringId, Snackbar.LENGTH_LONG);
+                .make(view, stringId, Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    /************************** IS USERNAME TAKEN ***********************/
+    public boolean isUsernameTaken(String username) {
+        if (mUserDBRepository.getUser(username) != null)
+            return true;
+        return false;
+    }
+
+    /**************************** IS PASSWORD TAKEN *********************/
+    public boolean isPasswordTaken(String password) {
+        List<User> users = mUserDBRepository.getUsers();
+
+        List<String> passwords = getAllPasswords(users);
+        for (int i = 0; i < passwords.size(); i++) {
+            if (passwords.get(i).equals(password))
+                return true;
+        }
+        return false;
+
+    }
+
+    private List<String> getAllPasswords(List<User> users) {
+        List<String> passwords = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            passwords.add(users.get(i).getPassword());
+        }
+        return passwords;
     }
 
 

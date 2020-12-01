@@ -17,7 +17,7 @@
         android:layout_marginTop="300dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/green_74"
+        android:backgroundTint="@color/blue_35"
         android:text="Task list"
         android:textSize="20sp" />
 
@@ -31,7 +31,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:backgroundTint="@color/green_74"
+        android:backgroundTint="@color/yellow_33"
         android:gravity="center_horizontal"
         android:text="User list"
         android:textSize="20sp" />

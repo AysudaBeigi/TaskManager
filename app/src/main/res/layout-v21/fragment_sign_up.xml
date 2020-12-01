@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_layout_sign_up"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".controller.fragment.SignUpFragment">
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        app:srcCompat="@mipmap/img_setting_check_pink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_sign_up_admin"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="@color/blue_ff"
+        android:backgroundTint="@color/yellow_33"
+        android:text="I am admin"
+        android:textColor="@color/pink_89"
+        android:textSize="20sp"
+        app:backgroundTint="@color/blue_35" />
+
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edit_text_username"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:hint="@string/hint_username"
+        android:inputType="textPersonName"
+        android:textColor="@color/black_00" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edit_text_password"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:textColor="@color/black_00" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_sign_up"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="@string/button_sign_up" />
+
+
+    </LinearLayout>
+</LinearLayout>
+
+
+

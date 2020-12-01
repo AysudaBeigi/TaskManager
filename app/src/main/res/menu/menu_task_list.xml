@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
         <item android:id="@+id/menu_item_logout"
             android:title="@string/menu_log_out"
@@ -7,6 +8,13 @@
         <item android:id="@+id/menu_item_delete_all_tasks"
             android:title="@string/menu_delete_all_tasks"
             />
+        <item
+            android:id="@+id/app_bar_search"
+            android:icon="@mipmap/img_yellow_search"
+
+            android:title="search"
+            app:actionViewClass="android.widget.SearchView"
+            app:showAsAction="always" />
 
 
 </menu>

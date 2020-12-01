@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
@@ -86,6 +87,7 @@ public class DatePickerFragment extends DialogFragment {
         int resultCode = Activity.RESULT_OK;
         Intent intent = new Intent();
         intent.putExtra(EXTRA_USER_SELECTED_DATE, userSelectedDate);
+        Log.d("TAG","date picker send result userSelectedDate "+userSelectedDate.toString());
         fragment.onActivityResult(requestCode, resultCode, intent);
     }
 

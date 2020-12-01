@@ -114,6 +114,7 @@ public class TaskListPagerActivity extends AppCompatActivity {
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                Log.d("TAG","addOnTabSelectedListener");
                 mViewPager2.setCurrentItem(tab.getPosition());
             }
 

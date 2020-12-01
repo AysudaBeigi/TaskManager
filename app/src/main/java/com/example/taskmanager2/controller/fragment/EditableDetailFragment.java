@@ -180,17 +180,14 @@ public class EditableDetailFragment extends DialogFragment {
                 if (checkedId == mRadioButtonTodo.getId()) {
                     mRadioButtonTodo.setChecked(true);
                     mTask.setSate(TaskState.TODO);
-                    // mTaskDBRepository.updateTask(mTask);
 
                 } else if (checkedId == mRadioButtonDoing.getId()) {
                     mRadioButtonDoing.setChecked(true);
                     mTask.setSate(TaskState.DOING);
-                    // mTaskDBRepository.updateTask(mTask);
 
                 } else if (checkedId == mRadioButtonDone.getId()) {
                     mRadioButtonDone.setChecked(true);
                     mTask.setSate(TaskState.DONE);
-                    // mTaskDBRepository.updateTask(mTask);
 
                 }
 

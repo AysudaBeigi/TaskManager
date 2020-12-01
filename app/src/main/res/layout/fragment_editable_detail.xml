@@ -116,7 +116,7 @@
             android:textSize="20dp"
             android:layout_margin="10dp"
             android:fontFamily="sans-serif-condensed-medium"
-            android:textColor="@color/purple_89"/>
+            android:textColor="@color/pink_89"/>
         <RadioGroup
             android:id="@+id/radio_group_edit_state"
             android:layout_width="match_parent"

@@ -31,5 +31,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="task_report">Task title is : * %1$s *
+     task description is :* %2$s *
+    task date is : * %3$s *
+    task state is : * %4$s *</string>
+    <string name="send_task">Send task</string>
+
 
 </resources>

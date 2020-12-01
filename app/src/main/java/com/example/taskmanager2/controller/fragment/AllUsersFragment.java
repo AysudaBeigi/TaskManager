@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.model.Task;
+import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.model.User;
 import com.example.taskmanager2.repository.TaskDBRepository;
 import com.example.taskmanager2.repository.UserDBRepository;
@@ -157,7 +158,7 @@ public class AllUsersFragment extends Fragment {
         }
 
         private void deleteUserTasks() {
-            List<Task> tasks = mUser.getTasks();
+            List<Task> tasks = mUserDBRepository.getUserAllTasks(mUser.getUsername());
             if (tasks != null) {
                 for (int i = 0; i < tasks.size(); i++) {
                     mTaskDBRepository.deleteTask(tasks.get(i));
@@ -171,8 +172,13 @@ public class AllUsersFragment extends Fragment {
 
                 mTextViewUsername.setText(user.getUsername());
                 SignUpDate.setText("SignUp date :" + getStringFormatDate(user.getSignUpDate()));
-                if (user.getTasks() != null) {
-                    mTextViewCountUserTasks.setText(user.getUsername() + " have " + user.getTasks().size());
+                List<Task> userAllTasks = mUserDBRepository.getUserAllTasks(user.getUsername());
+                if (userAllTasks != null) {
+                    Log.d("TAG", "AllUsersF binView user tasks is not null");
+                    mTextViewCountUserTasks.
+                            setText( "number of tasks : " + userAllTasks.size());
+                    Log.d("TAG",String.valueOf(userAllTasks.size()));
+
                 }
             } else {
                 generateSnackbar(mLinearLayout, R.string.snackbar_not_exits_user);

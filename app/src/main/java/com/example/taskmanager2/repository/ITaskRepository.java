@@ -12,7 +12,6 @@ public interface ITaskRepository {
     public Task getTask(String title);
     public void insertTask(Task task);
     public void deleteTask(Task task);
-    public void deleteTask(UUID taskUuid);
     public void updateTask(Task task);
 
 

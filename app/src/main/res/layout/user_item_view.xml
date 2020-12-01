@@ -13,14 +13,19 @@
         android:id="@+id/text_view_task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+
         android:layout_toLeftOf="@+id/img_view_delete_user"
         android:fontFamily="sans-serif-black"
         android:padding="5dp"
         android:textColor="@color/black_00"
         android:textColorHint="#958282"
         android:textSize="24sp"
-
         android:textStyle="normal" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -28,13 +33,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_task_title"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+
+        android:layout_marginBottom="5dp"
         android:layout_toLeftOf="@+id/img_view_delete_user"
         android:fontFamily="sans-serif-black"
         android:padding="2dp"
         android:textColor="@color/violet_20"
         android:textSize="18sp"
-
         android:textStyle="normal" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -42,7 +52,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_sign_up_date"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_toLeftOf="@+id/img_view_delete_user"
         android:fontFamily="sans-serif-black"
         android:padding="2dp"

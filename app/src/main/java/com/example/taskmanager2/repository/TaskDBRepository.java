@@ -7,9 +7,13 @@ import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.room.Room;
+
 import com.example.taskmanager2.database.TaskCursorWrapper;
+import com.example.taskmanager2.database.TaskDBDAO;
 import com.example.taskmanager2.database.TaskManagerDBHelper;
 import com.example.taskmanager2.database.TaskManagerDBSchema;
+import com.example.taskmanager2.database.TaskManagerDatabase;
 import com.example.taskmanager2.database.UserCursorWrapper;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
@@ -33,12 +37,22 @@ public class TaskDBRepository implements ITaskRepository {
     private static TaskDBRepository sInstance;
     private SQLiteDatabase mDatabase;
 
+    private TaskDBDAO mTaskDBDAO;
+    private Context mContext;
+
     /******************** CONSTRUCTOR ***********************/
     private TaskDBRepository(Context context) {
-        TaskManagerDBHelper taskManagerDBHelper = new
+        mContext=context.getApplicationContext();
+        TaskManagerDatabase taskManagerDatabase= Room.databaseBuilder(mContext,
+                TaskManagerDatabase.class,
+                TaskManagerDBSchema.NAME)
+                .allowMainThreadQueries()
+                .build();
+        mTaskDBDAO=taskManagerDatabase.getTaskDBDAO();
+       /* TaskManagerDBHelper taskManagerDBHelper = new
                 TaskManagerDBHelper(context.getApplicationContext());
         mDatabase = taskManagerDBHelper.getWritableDatabase();
-
+*/
         //  mTasks = new ArrayList<>();
     }
 
@@ -53,8 +67,9 @@ public class TaskDBRepository implements ITaskRepository {
 
     /************************** GET TASKS *************************/
     public List<Task> getTasks() {
+         return mTaskDBDAO.getTasks();
 
-        List<Task> tasks = new ArrayList<>();
+        /*List<Task> tasks = new ArrayList<>();
         TaskCursorWrapper taskCursorWrapper = queryTaskCursor(null, null);
         if (taskCursorWrapper == null || taskCursorWrapper.getCount() == 0)
             return tasks;
@@ -71,7 +86,7 @@ public class TaskDBRepository implements ITaskRepository {
             taskCursorWrapper.close();
         }
         return tasks;
-        //return mTasks;
+*/        //return mTasks;
     }
     /*private Task extractUserFromCursor(Cursor cursor) {
 
@@ -90,7 +105,8 @@ public class TaskDBRepository implements ITaskRepository {
 
     /********************** GET TASK WITH UUID *******************/
     public Task getTask(UUID uuid) {
-        String whereClause = TaskCols.UUID + " = ?";
+        return mTaskDBDAO.getTask(uuid);
+        /*String whereClause = TaskCols.UUID + " = ?";
         String[] whereArgs = new String[]{
                 uuid.toString()
         };
@@ -103,7 +119,7 @@ public class TaskDBRepository implements ITaskRepository {
             return task;
         } finally {
             taskCursorWrapper.close();
-        }
+        }*/
        /* for (int i = 0; i < mTasks.size(); i++) {
             if (mTasks.get(i).getUUID().equals(uuid))
                 return mTasks.get(i);
@@ -113,7 +129,7 @@ public class TaskDBRepository implements ITaskRepository {
     }
 
     /********************* QUERY TASK CURSOR **********************/
-    private TaskCursorWrapper queryTaskCursor(String whereClause, String[] whereArgs) {
+   /* private TaskCursorWrapper queryTaskCursor(String whereClause, String[] whereArgs) {
         Cursor cursor= mDatabase.query(TaskTable.NAME,
                 null,
                 whereClause,
@@ -124,11 +140,12 @@ public class TaskDBRepository implements ITaskRepository {
 
         return new TaskCursorWrapper(cursor);
     }
-
+*/
     /****************** GET TASK  WITH TITLE *********************/
     public Task getTask(String title) {
+       return   mTaskDBDAO.getTask(title);
 
-        String whereClause = TaskCols.TITLE + " = ?";
+       /* String whereClause = TaskCols.TITLE + " = ?";
         String[] whereArgs = new String[]{
                 title
         };
@@ -142,7 +159,7 @@ public class TaskDBRepository implements ITaskRepository {
         } finally {
             taskCursorWrapper.close();
         }
-
+*/
 
        /* for (int i = 0; i < mTasks.size(); i++) {
             if (mTasks.get(i).getTitle().equals(title))
@@ -153,19 +170,20 @@ public class TaskDBRepository implements ITaskRepository {
 
     /************************** INSET TASK **********************/
     public void insertTask(Task task) {
-        Log.d("TAG", "insertTask");
+        mTaskDBDAO.insertTask(task);
+      /*  Log.d("TAG", "insertTask");
         ContentValues values = getContentValues(task);
         mDatabase.insert(TaskTable.NAME,
                 null,
                 values);
-
+*/
         //  mTasks.add(task);
 
     }
 
     /******************* GET CONTENT VALUES ***********************/
 
-    public ContentValues getContentValues(Task task) {
+   /* public ContentValues getContentValues(Task task) {
         ContentValues values = new ContentValues();
         values.put(TaskCols.DATE, task.getDate().getTime());
         //values.put(TaskCols.ID, task.getId());
@@ -176,42 +194,44 @@ public class TaskDBRepository implements ITaskRepository {
         values.put(TaskCols.STATE, task.getSate().toString());
         return values;
     }
-
+*/
 
     /******************** DELETE TASK WITH TASK**************************/
     public void deleteTask(Task task) {
-        String whereClause = TaskCols.UUID + " = ?";
+        mTaskDBDAO.deleteTask(task);
+       /* String whereClause = TaskCols.UUID + " = ?";
         String[] whereArgs = new String[]{
                 task.getUUID().toString()
         };
         mDatabase.delete(TaskTable.NAME,
                 whereClause,
                 whereArgs);
-
+*/
         // mTasks.remove(task);
 
     }
 
     /*******************DELETE TASK WITH UUID *******************/
-    public void deleteTask(UUID taskUuid) {
-        String whereClause = TaskCols.UUID + " = ?";
+   // public void deleteTask(UUID taskUuid) {
+        /*String whereClause = TaskCols.UUID + " = ?";
         String[] whereArgs = new String[]{
                 taskUuid.toString()
         };
         mDatabase.delete(TaskTable.NAME,
                 whereClause,
                 whereArgs);
-
+*/
         /*for (int i = 0; i <mTasks.size() ; i++) {
             if(mTasks.get(i).getUUID().equals(taskUuid))
                 mTasks.remove(mTasks.get(i));
         }*/
 
-    }
+    //}
 
     /*********************** UPDATE TASK **********************/
     public void updateTask(Task task) {
-        ContentValues values = getContentValues(task);
+        mTaskDBDAO.updateTask(task);
+       /* ContentValues values = getContentValues(task);
         String whereClause = TaskCols.UUID + " = ?";
         String[] whereArgs = new String[]{
                 task.getUUID().toString()
@@ -220,7 +240,7 @@ public class TaskDBRepository implements ITaskRepository {
                 values,
                 whereClause,
                 whereArgs);
-
+*/
 
        /* Task mTask=getTask(task.getUUID());
         if(mTask!=null){

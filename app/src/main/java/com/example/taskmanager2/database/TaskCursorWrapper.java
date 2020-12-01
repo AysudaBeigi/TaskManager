@@ -18,7 +18,6 @@ public class TaskCursorWrapper extends CursorWrapper {
     public Task getTask(){
 
         UUID uuid = UUID.fromString(getString(getColumnIndex(TaskCols.UUID)));
-       // int id = getInt(getColumnIndex(TaskCols.ID));
         String username = getString(getColumnIndex(TaskCols.USERNAME));
         String title = getString(getColumnIndex(TaskCols.TITLE));
         String description = getString(getColumnIndex(TaskCols.DESCRIPTION));

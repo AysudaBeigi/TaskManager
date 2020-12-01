@@ -1,12 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.TaskManager" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="android:windowBackground">@color/peach_86</item>
+        <item name="android:windowBackground">@color/violet_46</item>
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_75</item>
-        <item name="colorPrimaryVariant">@color/peach_54</item>
-        <item name="colorOnPrimary">@color/purple_89</item>
+        <item name="colorPrimary">@color/violet_08</item>
+        <item name="colorPrimaryVariant">@color/violet_46</item>
+        <item name="colorOnPrimary">@color/white_ff</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/blue_35</item>
         <item name="colorOnSecondary">@color/blue_35</item>
@@ -22,7 +22,7 @@
     <style name="Widget.AppTheme.TextInputLayout.FilledBox.Dense"
         parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="errorIconDrawable">@null</item>
-        <item name="hintTextColor">@color/purple_89</item>
+        <item name="hintTextColor">@color/pink_89</item>
         <item name="boxBackgroundColor">@color/purple_86</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="errorTextColor">@color/orange_92</item>

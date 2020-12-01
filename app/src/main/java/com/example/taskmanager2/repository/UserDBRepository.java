@@ -6,8 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.room.Room;
+
 import com.example.taskmanager2.database.TaskManagerDBHelper;
+import com.example.taskmanager2.database.TaskManagerDBSchema;
+import com.example.taskmanager2.database.TaskManagerDatabase;
 import com.example.taskmanager2.database.UserCursorWrapper;
+import com.example.taskmanager2.database.UserDBDAO;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.model.User;
@@ -22,22 +27,30 @@ import  static com.example.taskmanager2.database.TaskManagerDBSchema.UserTable;
 public class UserDBRepository implements IUserRepository {
 
   //  private List<User> mUsers;
-    private List<Task> mAllTasks;
-    private TaskDBRepository mTaskDBRepository;
+    //private SQLiteDatabase mDatabase;
+   // private List<Task> mAllTasks;
+   // private TaskDBRepository mTaskDBRepository;
 
 
     private static UserDBRepository sInstance;
     private Context mContext;
-    private SQLiteDatabase mDatabase;
+    private UserDBDAO mUserDBDAO;
 
     /********************* CONSTRUCTOR ******************/
 
     private UserDBRepository(Context context) {
         mContext = context.getApplicationContext();
-        TaskManagerDBHelper taskManagerDBHelper = new TaskManagerDBHelper(mContext);
-        mDatabase = taskManagerDBHelper.getWritableDatabase();
 
-        Log.d("TAG", "new  uer repository and user array list ");
+        /*TaskManagerDBHelper taskManagerDBHelper = new TaskManagerDBHelper(mContext);
+        mDatabase = taskManagerDBHelper.getWritableDatabase();
+        */
+        TaskManagerDatabase taskManagerDatabase= Room.databaseBuilder(
+                mContext,
+                TaskManagerDatabase.class,
+                TaskManagerDBSchema.NAME)
+                .allowMainThreadQueries()
+                .build();
+        mUserDBDAO=taskManagerDatabase.getUserDBDAO();
 
         // mUsers = new ArrayList<>();
     }
@@ -57,7 +70,8 @@ public class UserDBRepository implements IUserRepository {
 
     /******************** GET USERS **********************/
     public List<User> getUsers() {
-        UserCursorWrapper userCursorWrapper = queryUserCursor(null, null);
+        return mUserDBDAO.getUsers();
+       /* UserCursorWrapper userCursorWrapper = queryUserCursor(null, null);
         List<User> users = new ArrayList<>();
         if (userCursorWrapper == null || userCursorWrapper.getCount() == 0)
             return users;
@@ -73,7 +87,7 @@ public class UserDBRepository implements IUserRepository {
             userCursorWrapper.close();
         }
         return users;
-
+*/
        /*
         return mUsers;
         */
@@ -91,7 +105,7 @@ public class UserDBRepository implements IUserRepository {
 
     /************************* QUERY  USER CURSOR *********************/
 
-    private UserCursorWrapper queryUserCursor(String whereClause, String[] whereArgs) {
+    /*private UserCursorWrapper queryUserCursor(String whereClause, String[] whereArgs) {
         Cursor cursor= mDatabase.query(UserTable.NAME,
                 null,
                 whereClause,
@@ -102,10 +116,11 @@ public class UserDBRepository implements IUserRepository {
         return new UserCursorWrapper(cursor);
 
     }
-
+*/
     /******************** GET USER  WITH USERNAME *********************/
     public User getUser(String username) {
-        String whereClause = UserCols.USERNAME + " = ?";
+       return mUserDBDAO.getUser(username);
+       /* String whereClause = UserCols.USERNAME + " = ?";
         String[] whereArgs = new String[]{
                 username
         };
@@ -119,7 +134,7 @@ public class UserDBRepository implements IUserRepository {
         } finally {
             userCursorWrapper.close();
         }
-
+*/
        /*
         for (int i = 0; i < mUsers.size(); i++) {
             if (mUsers.get(i).getUsername().equals(username))
@@ -132,7 +147,8 @@ public class UserDBRepository implements IUserRepository {
     /********************* GET USER WITH UUID ******************/
 
     public User getUser(UUID uuid) {
-        String whereClause = UserCols.UUID + " = ?";
+        return mUserDBDAO.getUser(uuid);
+        /*String whereClause = UserCols.UUID + " = ?";
         String[] whereArgs = new String[]{
                 uuid.toString()};
         UserCursorWrapper userCursorWrapper = queryUserCursor(whereClause, whereArgs);
@@ -145,7 +161,7 @@ public class UserDBRepository implements IUserRepository {
         } finally {
             userCursorWrapper.close();
         }
-
+*/
         /*for (int i = 0; i < mUsers.size(); i++) {
             if (mUsers.get(i).getUUID().equals(uuid))
                 return mUsers.get(i);
@@ -156,12 +172,13 @@ public class UserDBRepository implements IUserRepository {
     /********************** INSERT USER ***********************/
 
     public void insertUser(User user) {
-        Log.d("TAG", "insert user  ");
+        mUserDBDAO.insertUser(user);
+      /*  Log.d("TAG", "insert user  ");
         ContentValues values = getContentValues(user);
         mDatabase.insert(UserTable.NAME,
                 null,
                 values);
-
+*/
 /*
         mUsers.add(user);
 */
@@ -169,32 +186,33 @@ public class UserDBRepository implements IUserRepository {
     }
 
     /************************ GET CONTENT VALUES ******************/
-    public ContentValues getContentValues(User user) {
+   /* public ContentValues getContentValues(User user) {
         ContentValues values = new ContentValues();
         values.put(UserCols.SIGN_UP_DATE, user.getSignUpDate().getTime());
-       // values.put(UserCols.ID, user.getId());
         values.put(UserCols.UUID, user.getUUID().toString());
         values.put(UserCols.USERNAME, user.getUsername());
         values.put(UserCols.PASSWORD, user.getPassword());
         return values;
-    }
+    }*/
 
     /************************ DELETE USER ************************/
     public void deleteUser(User user) {
-        String whereClause = UserCols.UUID + " = ?";
+        mUserDBDAO.deleteUser(user);
+       /* String whereClause = UserCols.UUID + " = ?";
         String[] whereArgs = new String[]{
                 user.getUUID().toString()
         };
         mDatabase.delete(UserTable.NAME,
                 whereClause,
-                whereArgs);
+                whereArgs);*/
         /*  mUsers.remove(user);
          */
     }
 
     /**************************** UPDATE USER *********************/
     public void updateUser(User user) {
-        ContentValues values = getContentValues(user);
+        mUserDBDAO.updateUser(user);
+       /* ContentValues values = getContentValues(user);
         String whereClause = UserCols.UUID + " = ?";
         String[] whereArgs = new String[]{
                 user.getUUID().toString()};
@@ -203,7 +221,7 @@ public class UserDBRepository implements IUserRepository {
                 whereClause,
                 whereArgs);
 
-
+*/
        /* for (int i = 0; i < mUsers.size(); i++) {
             if (mUsers.get(i).getUUID().equals(user.getUUID())) {
                 mUsers.get(i).setPassword(user.getPassword());
@@ -217,8 +235,9 @@ public class UserDBRepository implements IUserRepository {
 
     /************************* GET TASKS ***************************/
     public List<Task> getTasks(String username, TaskState state) {
+        return mUserDBDAO.getTasks(username,state);
 
-        mTaskDBRepository = TaskDBRepository.getInstance(mContext);
+       /* mTaskDBRepository = TaskDBRepository.getInstance(mContext);
         mAllTasks = mTaskDBRepository.getTasks();
         Log.d("TAG","AllTasks size is :"+mAllTasks.size());
 
@@ -235,37 +254,25 @@ public class UserDBRepository implements IUserRepository {
         }
         Log.d("TAG","size of userTasks is :"+userTasks.size());
         return userTasks;
+        */
     }
 
-    /************************** IS USERNAME TAKEN ***********************/
-    public boolean isUsernameTaken(String username) {
-        if (getUser(username) != null)
-            return true;
-        return false;
-    }
 
-    /**************************** IS PASSWORD TAKEN *********************/
-    public boolean isPasswordTaken(String password) {
+    public List<Task> getUserAllTasks(String username){
+        return mUserDBDAO.getUserAllTasks(username);
 
-        String whereClause = UserCols.PASSWORD + " = ?";
-        String[] whereArgs = new String[]{
-                password
-        };
-        UserCursorWrapper userCursorWrapper = queryUserCursor(whereClause, whereArgs);
-        if (userCursorWrapper == null || userCursorWrapper.getCount() == 0)
-            return false;
-        try {
-            return true;
-        } finally {
-            userCursorWrapper.close();
+        /*mTaskDBRepository = TaskDBRepository.getInstance(mContext);
+        mAllTasks = mTaskDBRepository.getTasks();
+
+        List<Task> userTasks = new ArrayList<>();
+
+        for (int i = 0; i < mAllTasks.size(); i++) {
+            if (mAllTasks.get(i).getUsername().equals(username)) {
+                userTasks.add(mAllTasks.get(i));
+            }
         }
-
-
-       /* for (int i = 0; i < mUsers.size(); i++) {
-            if (mUsers.get(i).getPassword().equals(password))
-                return true;
-        }
-        return false;*/
+        return userTasks;
+        */
     }
 
 

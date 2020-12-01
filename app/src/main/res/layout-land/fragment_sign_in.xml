@@ -11,11 +11,11 @@
 
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="150dp"
-        android:layout_height="80dp"
+        android:layout_width="200dp"
+        android:layout_height="90dp"
         android:focusable="auto"
         android:scaleType="centerCrop"
-        android:src="@mipmap/layer_task_manager" />
+        app:srcCompat="@mipmap/img_setting_check_pink" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_text_username"

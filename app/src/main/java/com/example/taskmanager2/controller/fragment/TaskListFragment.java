@@ -50,7 +50,7 @@ public class TaskListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private UserDBRepository mUserDBRepository;
     private TaskDBRepository mTaskDBRepository;
-    private FloatingActionButton mButtonAddTask;
+    private ShapeableImageView mButtonAddTask;
     private ShapeableImageView mImgEmptyAdd;
     private MaterialTextView mTextViewEmptyAdd;
 
@@ -111,7 +111,7 @@ public class TaskListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recycler_view_task_list);
         mImgEmptyAdd = view.findViewById(R.id.img_view_empty_add);
         mTextViewEmptyAdd = view.findViewById(R.id.text_view_empty_add);
-        mButtonAddTask = view.findViewById(R.id.btn_add);
+        mButtonAddTask = view.findViewById(R.id.imge_view_floating_add);
     }
 
     /*******************  INTI VIEW ********************************/
@@ -223,6 +223,8 @@ public class TaskListFragment extends Fragment {
             Log.d("TAG", "TLF onBindViewHolder ");
 
             Task task = mTasks.get(position);
+            Log.d("TAG","task.getDate is :"+task.getDate().toString());
+
             holder.bindView(task);
 
         }
@@ -235,6 +237,7 @@ public class TaskListFragment extends Fragment {
         private MaterialTextView mTextViewTitle;
         private MaterialTextView mTextViewDate;
         private MaterialTextView mTextViewFirstChar;
+        private ShapeableImageView mImageViewShare;
         private Task mTask;
 
         public TaskViewHolder(@NonNull View itemView) {
@@ -242,6 +245,12 @@ public class TaskListFragment extends Fragment {
             super(itemView);
             Log.d("TAG", "TLF TaskViewHolder ");
             findViews(itemView);
+            setTaskItemListeners(itemView);
+
+
+        }
+
+        private void setTaskItemListeners(@NonNull View itemView) {
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -256,8 +265,33 @@ public class TaskListFragment extends Fragment {
 
                 }
             });
+            mImageViewShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shareTaskReport();
 
 
+                }
+            });
+        }
+
+        private void shareTaskReport() {
+            Intent sendIntent=new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT,getTaskReport());
+            sendIntent.setType("text/plain");
+            Intent shareIntent=Intent.createChooser(sendIntent,getString(R.string.send_task));
+            if(sendIntent.resolveActivity(getActivity().getPackageManager())!=null){
+                startActivity(shareIntent);
+            }
+        }
+
+        private String  getTaskReport() {
+            String title=mTask.getTitle();
+            String description=mTask.getDescription();
+            String dateStr=getStringFormatDate(mTask.getDate());
+            String stateStr=mTask.getSate().toString();
+            String report=getString(R.string.task_report,title,description,dateStr,stateStr);
+            return report;
         }
 
         public void bindView(Task task) {
@@ -277,6 +311,7 @@ public class TaskListFragment extends Fragment {
             mTextViewTitle = itemView.findViewById(R.id.text_view_task_title);
             mTextViewDate = itemView.findViewById(R.id.text_view_date);
             mTextViewFirstChar = itemView.findViewById(R.id.text_view_first_char);
+            mImageViewShare=itemView.findViewById(R.id.img_view_share);
         }
     }
 
@@ -297,6 +332,9 @@ public class TaskListFragment extends Fragment {
                 Log.d("TAG", "TaskListF == onActivityResult == requestCode AddTask");
                 mTask = (Task) data.getSerializableExtra(AddTaskFragment.EXTRA_TASK);
                 Log.d("TAG", "added task title is :" + mTask.getTitle());
+                Log.d("TAG"," === mTask>date is :"
+                        +mTask.getDate().toString());
+
                 updateList();
 
                 break;
@@ -304,6 +342,10 @@ public class TaskListFragment extends Fragment {
                 Log.d("TAG", "TaskListF == onActivityResult == requestCode EditTask");
 
                 mTask = (Task) data.getSerializableExtra(EditableDetailFragment.EXTRA_TASK);
+                Log.d("TAG", "added task title is :" + mTask.getTitle());
+
+                Log.d("TAG"," === mTask>date is :"
+                        +mTask.getDate().toString());
 
                 updateList();
                 break;

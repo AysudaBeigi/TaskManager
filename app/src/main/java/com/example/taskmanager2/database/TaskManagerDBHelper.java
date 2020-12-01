@@ -23,7 +23,6 @@ public class TaskManagerDBHelper extends SQLiteOpenHelper {
 
         generateTaskQuery(db);
 
-
     }
 
     private void generateTaskQuery(SQLiteDatabase db) {
