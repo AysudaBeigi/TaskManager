@@ -47,12 +47,16 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imge_view_floating_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-          app:maxImageSize="250dp"
-        android:layout_margin="5dp"
-        app:srcCompat="@mipmap/img_plus_blue"
-        />
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        app:maxImageSize="250dp"
+        app:srcCompat="@mipmap/img_plus_blue" />
 </RelativeLayout>

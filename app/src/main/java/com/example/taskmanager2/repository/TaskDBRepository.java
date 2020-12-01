@@ -18,10 +18,12 @@ import com.example.taskmanager2.database.UserCursorWrapper;
 import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.FileHandler;
 
 import com.example.taskmanager2.database.TaskManagerDBSchema.TaskTable.TaskCols;
 import com.example.taskmanager2.database.TaskManagerDBSchema.TaskTable;
@@ -250,6 +252,12 @@ public class TaskDBRepository implements ITaskRepository {
             mTask.setSate(task.getSate());
         }*/
 
+    }
+
+    public File getPhotoFile(Task task){
+        File filesDir=mContext.getFilesDir();
+        File photoFile=new File(filesDir,task.getPhotoFileName());
+        return photoFile;
     }
 
 

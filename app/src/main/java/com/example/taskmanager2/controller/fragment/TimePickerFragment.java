@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -93,6 +94,8 @@ public class TimePickerFragment extends DialogFragment {
         mTimePicker = view.findViewById(R.id.time_picker);
     }
     /******************************** INIT VIEWS *******************************/
+    @RequiresApi(api = Build.VERSION_CODES.M)
+
     private void initViews() {
 
             /*Calendar calendar = Calendar.getInstance();
@@ -110,15 +113,17 @@ public class TimePickerFragment extends DialogFragment {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mTaskNowDate);
-        mTimePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
-        mTimePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+        mTimePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+        mTimePicker.setMinute(calendar.get(Calendar.MINUTE));
     }
 
 
     /**************************** EXTRACT USER SELECTED TIME *****************/
+    @RequiresApi(api = Build.VERSION_CODES.M)
+
     public Date extractUserSelectedTime() {
-        int hour = mTimePicker.getCurrentHour();
-        int minute = mTimePicker.getCurrentMinute();
+        int hour = mTimePicker.getHour();
+        int minute = mTimePicker.getMinute();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);

@@ -82,7 +82,8 @@ public class Task  implements Serializable {
     public void setDate(Date date)
     {
 
-        Calendar calendar = Calendar.getInstance();
+        mDate=date;
+       /* Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
         int year = calendar.get(Calendar.YEAR);
@@ -91,20 +92,21 @@ public class Task  implements Serializable {
         calendar.set(year, monthOfYear, dayOfMonth,
                 mDate.getHours(), mDate.getMinutes(), mDate.getSeconds());
         mDate = calendar.getTime();
-
+*/
     }
 
     public void setTime(Date time) {
         Log.d("TAG", "Task set time : "+time.toString());
 
-        Calendar calendar = Calendar.getInstance();
+        /*Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
         int hour=calendar.get(Calendar.HOUR_OF_DAY);
         int minute=calendar.get(Calendar.MINUTE);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         mDate=calendar.getTime();
-
+*/
+        mDate=time;
         Log.d("TAG", "Task set time : "+mDate.toString());
 
        /* mDate.setHours(time.getHours());
@@ -149,5 +151,8 @@ public class Task  implements Serializable {
         return mDate;
     }
 
+    public  String getPhotoFileName(){
+        return "IMG_"+getUUID()+".jpg";
+    }
 
 }

@@ -4,14 +4,21 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,10 +33,11 @@ import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.repository.TaskDBRepository;
 import com.example.taskmanager2.repository.UserDBRepository;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.taskmanager2.utils.PictureUtils;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +51,7 @@ public class TaskListFragment extends Fragment {
     public static final int REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT = 1;
     public static final int REQUEST_CODE_ADD_TASK_FRAGMENT = 2;
     public static final String TAG_ADD_TASK_FRAGMENT = "tagAddTaskFragment";
+    public static final int REQUEST_CODE_TAKE_PICTURE = 3;
 
     private String mUsername;
     private TaskState mState;
@@ -57,6 +66,11 @@ public class TaskListFragment extends Fragment {
     private TaskListAdapter mTaskListAdapter;
 
     private Task mTask;
+
+    private File mPhotoFile;
+    private ShapeableImageView mImageViewTaskIcon;
+
+
 
     /*********************** CONSTRUCTOR *********************/
     public TaskListFragment() {
@@ -83,6 +97,7 @@ public class TaskListFragment extends Fragment {
         mState = (TaskState) getArguments().getSerializable(ARGS_STATE);
         setHasOptionsMenu(true);
         mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
+        mPhotoFile = mTaskDBRepository.getPhotoFile(mTask);
         Log.d("TAG", "TLF on create  ");
 
 
@@ -223,7 +238,7 @@ public class TaskListFragment extends Fragment {
             Log.d("TAG", "TLF onBindViewHolder ");
 
             Task task = mTasks.get(position);
-            Log.d("TAG","task.getDate is :"+task.getDate().toString());
+            Log.d("TAG", "task.getDate is :" + task.getDate().toString());
 
             holder.bindView(task);
 
@@ -269,28 +284,58 @@ public class TaskListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     shareTaskReport();
-
-
+                }
+            });
+            mImageViewTaskIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    try {
+                        if (takePictureIntent.
+                                resolveActivity(getActivity().getPackageManager()) != null
+                        &&mPhotoFile!=null) {
+                            Uri photoUri = getUriForPhotoFile();
+                            grantWriteUriDestinationActivities(takePictureIntent, photoUri);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
+                            startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PICTURE);
+                        }
+                    } catch (Exception e) {
+                        Log.d("TAG", e.getMessage());
+                    }
                 }
             });
         }
 
+        private void grantWriteUriDestinationActivities(Intent takePictureIntent, Uri photoUri) {
+            List<ResolveInfo> activities=getActivity().
+                    getPackageManager().
+                    queryIntentActivities(
+                            takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            for(ResolveInfo activity:activities){
+                getActivity().grantUriPermission(
+                        activity.activityInfo.packageName,
+                       photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            }
+        }
+
         private void shareTaskReport() {
-            Intent sendIntent=new Intent(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT,getTaskReport());
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getTaskReport());
             sendIntent.setType("text/plain");
-            Intent shareIntent=Intent.createChooser(sendIntent,getString(R.string.send_task));
-            if(sendIntent.resolveActivity(getActivity().getPackageManager())!=null){
+            Intent shareIntent = Intent.createChooser(sendIntent, getString(R.string.send_task));
+            if (sendIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivity(shareIntent);
             }
         }
 
-        private String  getTaskReport() {
-            String title=mTask.getTitle();
-            String description=mTask.getDescription();
-            String dateStr=getStringFormatDate(mTask.getDate());
-            String stateStr=mTask.getSate().toString();
-            String report=getString(R.string.task_report,title,description,dateStr,stateStr);
+        private String getTaskReport() {
+            String title = mTask.getTitle();
+            String description = mTask.getDescription();
+            String dateStr = getStringFormatDate(mTask.getDate());
+            String stateStr = mTask.getSate().toString();
+            String report = getString(R.string.task_report, title, description, dateStr, stateStr);
             return report;
         }
 
@@ -311,8 +356,15 @@ public class TaskListFragment extends Fragment {
             mTextViewTitle = itemView.findViewById(R.id.text_view_task_title);
             mTextViewDate = itemView.findViewById(R.id.text_view_date);
             mTextViewFirstChar = itemView.findViewById(R.id.text_view_first_char);
-            mImageViewShare=itemView.findViewById(R.id.img_view_share);
+            mImageViewShare = itemView.findViewById(R.id.img_view_share);
+            mImageViewTaskIcon = itemView.findViewById(R.id.img_view_icon);
         }
+    }
+
+    private Uri getUriForPhotoFile() {
+        return FileProvider.getUriForFile(getContext(),
+                                        "com.example.taskmanegerapplication.fileprovider",
+                                        mPhotoFile);
     }
 
     /************************* GET STRING FORMAT DATE ******************/
@@ -332,8 +384,8 @@ public class TaskListFragment extends Fragment {
                 Log.d("TAG", "TaskListF == onActivityResult == requestCode AddTask");
                 mTask = (Task) data.getSerializableExtra(AddTaskFragment.EXTRA_TASK);
                 Log.d("TAG", "added task title is :" + mTask.getTitle());
-                Log.d("TAG"," === mTask>date is :"
-                        +mTask.getDate().toString());
+                Log.d("TAG", " === mTask>date is :"
+                        + mTask.getDate().toString());
 
                 updateList();
 
@@ -344,14 +396,33 @@ public class TaskListFragment extends Fragment {
                 mTask = (Task) data.getSerializableExtra(EditableDetailFragment.EXTRA_TASK);
                 Log.d("TAG", "added task title is :" + mTask.getTitle());
 
-                Log.d("TAG"," === mTask>date is :"
-                        +mTask.getDate().toString());
+                Log.d("TAG", " === mTask>date is :"
+                        + mTask.getDate().toString());
 
                 updateList();
+                break;
+            case REQUEST_CODE_TAKE_PICTURE:
+                revokeWriteUriPermission();
+                updateIconPhoto();
+
                 break;
         }
 
 
+    }
+
+    private void updateIconPhoto() {
+        if(mPhotoFile==null|| !mPhotoFile.exists()){
+            return;
+        }
+        Bitmap bitmap= PictureUtils.getScaledBitmap(mPhotoFile.getAbsolutePath(),getActivity());
+        mImageViewTaskIcon.setImageBitmap(bitmap);
+    }
+
+    private void revokeWriteUriPermission() {
+        Uri photoUri=getUriForPhotoFile();
+        getActivity().revokeUriPermission(photoUri,
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
     }
 
 

@@ -2,18 +2,25 @@ package com.example.taskmanager2.repository;
 
 import com.example.taskmanager2.model.Task;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
 public interface ITaskRepository {
 
-    public List<Task> getTasks();
-    public Task getTask(UUID uuid);
-    public Task getTask(String title);
-    public void insertTask(Task task);
-    public void deleteTask(Task task);
-    public void updateTask(Task task);
+    List<Task> getTasks();
 
+    Task getTask(UUID uuid);
+
+    Task getTask(String title);
+
+    void insertTask(Task task);
+
+    void deleteTask(Task task);
+
+    void updateTask(Task task);
+
+    File getPhotoFile(Task task);
 
 
 }

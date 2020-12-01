@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:layout_margin="5dp"
+    android:layout_margin="0.5dp"
     android:background="@color/white_ff">
 
 
@@ -43,14 +43,14 @@
         android:id="@+id/text_view_task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@+id/img_view_share"
+        android:layout_toLeftOf="@+id/img_view_share"
         android:layout_toEndOf="@+id/img_view_icon"
         android:layout_toRightOf="@+id/img_view_icon"
         android:fontFamily="sans-serif-black"
@@ -64,19 +64,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_task_title"
-        android:layout_alignParentEnd="true"
-
-        android:layout_alignParentRight="true"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@+id/img_view_share"
+        android:layout_toLeftOf="@+id/img_view_share"
         android:layout_toEndOf="@+id/img_view_icon"
         android:layout_toRightOf="@+id/img_view_icon"
         android:padding="5dp"
+        android:textColor="@color/pink_89"
         android:textSize="18sp"
         android:textStyle="normal"
         tools:text="Hiiiiiiiiiii" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_view_share"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
+        android:cropToPadding="true"
+
+        app:srcCompat="@mipmap/img_share_foreground" />
 
 
 </RelativeLayout>
