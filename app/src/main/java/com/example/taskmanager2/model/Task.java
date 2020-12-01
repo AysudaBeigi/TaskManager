@@ -32,6 +32,8 @@ public class Task  implements Serializable {
     private String mUsername;
 @ColumnInfo(name = TaskCols.UUID)
     private UUID mUUID;
+@ColumnInfo(name = TaskCols.PHOTO_ADDRESS)
+private String mPhotoAddress;
     /******************* CONSTRUCTOR *****************/
 
     public Task(String username, TaskState sate ) {
@@ -39,16 +41,18 @@ public class Task  implements Serializable {
         mSate = sate;
         mUsername = username;
         mUUID=UUID.randomUUID();
+        mPhotoAddress="";
     }
 
     public Task(UUID uuid, String username,
-                String title, String description, Date date, TaskState sate) {
+                String title, String description, Date date, TaskState sate,String photoAddress) {
         mUUID=uuid;
         mUsername = username;
         mTitle = title;
         mDescription = description;
         mDate = date;
         mSate = sate;
+        mPhotoAddress=photoAddress;
 
     }
     /*public Task(String description, Date date, TaskState sate, String username) {
@@ -81,9 +85,7 @@ public class Task  implements Serializable {
 
     public void setDate(Date date)
     {
-
-        mDate=date;
-       /* Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
         int year = calendar.get(Calendar.YEAR);
@@ -92,27 +94,27 @@ public class Task  implements Serializable {
         calendar.set(year, monthOfYear, dayOfMonth,
                 mDate.getHours(), mDate.getMinutes(), mDate.getSeconds());
         mDate = calendar.getTime();
-*/
+
     }
 
     public void setTime(Date time) {
         Log.d("TAG", "Task set time : "+time.toString());
 
-        /*Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
         int hour=calendar.get(Calendar.HOUR_OF_DAY);
         int minute=calendar.get(Calendar.MINUTE);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         mDate=calendar.getTime();
-*/
-        mDate=time;
         Log.d("TAG", "Task set time : "+mDate.toString());
 
        /* mDate.setHours(time.getHours());
         mDate.setMinutes(time.getMinutes());
         mDate.setSeconds(time.getSeconds());
-   */ }
+   */
+        
+    }
 
     public void setUUID(UUID UUID) {
         mUUID = UUID;
@@ -120,6 +122,10 @@ public class Task  implements Serializable {
 
     public void setId(long id) {
         mId = id;
+    }
+
+    public void setPhotoAddress(String photoAddress) {
+        mPhotoAddress = photoAddress;
     }
 
     /********************** GETTER ***********************/
@@ -155,4 +161,7 @@ public class Task  implements Serializable {
         return "IMG_"+getUUID()+".jpg";
     }
 
+    public String getPhotoAddress() {
+        return mPhotoAddress;
+    }
 }

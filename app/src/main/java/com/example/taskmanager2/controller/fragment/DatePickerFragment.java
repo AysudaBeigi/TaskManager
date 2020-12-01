@@ -98,6 +98,7 @@ public class DatePickerFragment extends DialogFragment {
         int dayOfMonth = mDatePicker.getDayOfMonth();
         GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, dayOfMonth);
         return gregorianCalendar.getTime();
+
     }
 
     /****************** SET NOW DATE FOR DATE PICKER ***********/

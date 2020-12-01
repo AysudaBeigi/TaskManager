@@ -9,10 +9,9 @@
             android:title="@string/menu_delete_all_tasks"
             />
         <item
-            android:id="@+id/app_bar_search"
+            android:id="@+id/menu_item_search"
             android:icon="@mipmap/img_yellow_search"
-
-            android:title="search"
+            android:title="Search"
             app:actionViewClass="android.widget.SearchView"
             app:showAsAction="always" />
 

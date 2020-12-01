@@ -256,8 +256,12 @@ public class TaskDBRepository implements ITaskRepository {
 
     public File getPhotoFile(Task task){
         File filesDir=mContext.getFilesDir();
+        if(task!=null){
         File photoFile=new File(filesDir,task.getPhotoFileName());
         return photoFile;
+
+        }
+        return null;
     }
 
 

@@ -2,6 +2,7 @@ package com.example.taskmanager2.controller.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,6 +27,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.SearchView;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.activity.SignInActivity;
@@ -39,6 +43,8 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +58,7 @@ public class TaskListFragment extends Fragment {
     public static final int REQUEST_CODE_ADD_TASK_FRAGMENT = 2;
     public static final String TAG_ADD_TASK_FRAGMENT = "tagAddTaskFragment";
     public static final int REQUEST_CODE_TAKE_PICTURE = 3;
+    public static final String AUTHORITY = "com.example.taskmanegerapplication.fileprovider";
 
     private String mUsername;
     private TaskState mState;
@@ -69,7 +76,7 @@ public class TaskListFragment extends Fragment {
 
     private File mPhotoFile;
     private ShapeableImageView mImageViewTaskIcon;
-
+    private boolean mIsPhotoTaken = false;
 
 
     /*********************** CONSTRUCTOR *********************/
@@ -97,7 +104,6 @@ public class TaskListFragment extends Fragment {
         mState = (TaskState) getArguments().getSerializable(ARGS_STATE);
         setHasOptionsMenu(true);
         mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
-        mPhotoFile = mTaskDBRepository.getPhotoFile(mTask);
         Log.d("TAG", "TLF on create  ");
 
 
@@ -196,9 +202,11 @@ public class TaskListFragment extends Fragment {
     }
 
     /**************************** TASK LIST ADAPTER *********************************/
-    public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
+    public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> implements Filterable {
 
         List<Task> mTasks;
+        List<Task> mFilteredTaskList;
+
 
         public TaskListAdapter(List<Task> tasks) {
             Log.d("TAG", "TLF TaskListAdapter ");
@@ -208,9 +216,12 @@ public class TaskListFragment extends Fragment {
 
         public void setTasks(List<Task> tasks) {
             Log.d("TAG", " tASK ADAPTER setTask");
-            notifyDataSetChanged();
 
             mTasks = tasks;
+            if (tasks != null)
+                mFilteredTaskList = new ArrayList<>(tasks);
+            notifyDataSetChanged();
+
         }
 
         public List<Task> getTasks() {
@@ -244,6 +255,44 @@ public class TaskListFragment extends Fragment {
 
         }
 
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    List<Task> filteredList = new ArrayList<>();
+
+                    if (charSequence.toString().isEmpty()) {
+                        filteredList.addAll(mFilteredTaskList);
+                    } else {
+                        for (Task task : mFilteredTaskList) {
+                            if (task.getTitle().toLowerCase()
+                                    .contains(charSequence.toString().toLowerCase()) ||
+                                    task.getDescription().toLowerCase()
+                                            .contains(charSequence.toString().toLowerCase()) ||
+                                    task.getSate().toString()
+                                            .contains(charSequence.toString().toLowerCase()) ||
+                                    task.getDate().toString().toLowerCase()
+                                            .contains(charSequence.toString().toLowerCase())) {
+                                filteredList.add(task);
+                            }
+                        }
+                    }
+                    FilterResults results = new FilterResults();
+                    results.values = filteredList;
+
+                    return results;
+                }
+
+                @Override
+                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                    if (mTasks != null)
+                        mTasks.clear();
+                    if (filterResults.values != null)
+                        mTasks.addAll((Collection<? extends Task>) filterResults.values);
+                    notifyDataSetChanged();
+                }
+            };
+        }
     }
 
     /********************************** TASK VIEW HOLDER **********************************/
@@ -289,17 +338,18 @@ public class TaskListFragment extends Fragment {
             mImageViewTaskIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d("TAG", "icon listener ");
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     try {
                         if (takePictureIntent.
                                 resolveActivity(getActivity().getPackageManager()) != null
-                        &&mPhotoFile!=null) {
+                                && mPhotoFile != null) {
                             Uri photoUri = getUriForPhotoFile();
                             grantWriteUriDestinationActivities(takePictureIntent, photoUri);
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                             startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PICTURE);
                         }
-                    } catch (Exception e) {
+                    } catch (ActivityNotFoundException e) {
                         Log.d("TAG", e.getMessage());
                     }
                 }
@@ -307,14 +357,14 @@ public class TaskListFragment extends Fragment {
         }
 
         private void grantWriteUriDestinationActivities(Intent takePictureIntent, Uri photoUri) {
-            List<ResolveInfo> activities=getActivity().
+            List<ResolveInfo> activities = getActivity().
                     getPackageManager().
                     queryIntentActivities(
                             takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
-            for(ResolveInfo activity:activities){
+            for (ResolveInfo activity : activities) {
                 getActivity().grantUriPermission(
                         activity.activityInfo.packageName,
-                       photoUri,
+                        photoUri,
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
             }
@@ -349,6 +399,12 @@ public class TaskListFragment extends Fragment {
                 mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
 
             }
+            mPhotoFile = mTaskDBRepository.getPhotoFile(task);
+            if (mIsPhotoTaken) {
+                task.setPhotoAddress(mPhotoFile.getAbsolutePath());
+                mTaskDBRepository.updateTask(task);
+            }
+
         }
 
         private void findViews(@NonNull View itemView) {
@@ -362,9 +418,7 @@ public class TaskListFragment extends Fragment {
     }
 
     private Uri getUriForPhotoFile() {
-        return FileProvider.getUriForFile(getContext(),
-                                        "com.example.taskmanegerapplication.fileprovider",
-                                        mPhotoFile);
+        return FileProvider.getUriForFile(getContext(), AUTHORITY, mPhotoFile);
     }
 
     /************************* GET STRING FORMAT DATE ******************/
@@ -404,6 +458,8 @@ public class TaskListFragment extends Fragment {
             case REQUEST_CODE_TAKE_PICTURE:
                 revokeWriteUriPermission();
                 updateIconPhoto();
+                mIsPhotoTaken = true;
+                updateList();
 
                 break;
         }
@@ -412,15 +468,15 @@ public class TaskListFragment extends Fragment {
     }
 
     private void updateIconPhoto() {
-        if(mPhotoFile==null|| !mPhotoFile.exists()){
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
             return;
         }
-        Bitmap bitmap= PictureUtils.getScaledBitmap(mPhotoFile.getAbsolutePath(),getActivity());
+        Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getAbsolutePath(), getActivity());
         mImageViewTaskIcon.setImageBitmap(bitmap);
     }
 
     private void revokeWriteUriPermission() {
-        Uri photoUri=getUriForPhotoFile();
+        Uri photoUri = getUriForPhotoFile();
         getActivity().revokeUriPermission(photoUri,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
     }
@@ -430,6 +486,21 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_task_list, menu);
+        MenuItem searchItem=menu.findItem(R.id.menu_item_search);
+        SearchView searchView= (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mTaskListAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     /**************** ON OPTION MENU SELECTED ****************/
@@ -442,6 +513,7 @@ public class TaskListFragment extends Fragment {
             case R.id.menu_item_delete_all_tasks:
                 buildDeleteUserTasksAlertDialog();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
 

@@ -59,6 +59,7 @@ public class TimePickerFragment extends DialogFragment {
 
     /**************************** ON CREATE DIALOG ******************/
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class TimePickerFragment extends DialogFragment {
 
     private void initViews() {
 
-            /*Calendar calendar = Calendar.getInstance();
+           /* Calendar calendar = Calendar.getInstance();
             calendar.setTime(mTaskNowDate);
 
             if (Build.VERSION.SDK_INT < 23) {
@@ -107,14 +108,17 @@ public class TimePickerFragment extends DialogFragment {
             } else {
                 mTimePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
                 mTimePicker.setMinute(calendar.get(Calendar.MINUTE));
-            }*/
-
+            }
+*/
         Log.d("TAG", "TimePickerFragment initViews   "+mTaskNowDate.toString());
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mTaskNowDate);
         mTimePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
         mTimePicker.setMinute(calendar.get(Calendar.MINUTE));
+
+       // int hour = mCalendar.get(Calendar.HOUR);
+
     }
 
 
@@ -131,6 +135,16 @@ public class TimePickerFragment extends DialogFragment {
         Log.d("TAG", "TimePickerFragment extract selected    "+userSelectedTime.toString());
 
         return userSelectedTime;
+
+        /*LocalDateTime now = LocalDateTime.now();
+        int hour = mTimePicker.getHour();
+        int minute = mTimePicker.getMinute();
+        int second = now.getSecond();
+
+        mCalendar.set(Calendar.HOUR_OF_DAY, hour);
+        mCalendar.set(Calendar.MINUTE, minute);
+        mCalendar.set(Calendar.SECOND, second);
+*/
 
     }
 

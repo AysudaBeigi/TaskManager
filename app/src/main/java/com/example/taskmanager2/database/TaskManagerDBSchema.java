@@ -32,6 +32,8 @@ public class TaskManagerDBSchema {
             public static final String DATE = "date";
             public static final String UUID = "uuid";
             public static final String USERNAME = "username";
+            public static final String PHOTO_ADDRESS = "photo_address";
+
         }
 
     }
