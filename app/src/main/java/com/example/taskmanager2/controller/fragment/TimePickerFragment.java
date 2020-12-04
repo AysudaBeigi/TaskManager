@@ -25,11 +25,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class TimePickerFragment extends DialogFragment {
-    public static final String ARGS_TASK_NOW_DATE = "argsTaskNowTime";
+    public static final String ARGS_TASK_NOW_TIME = "argsTaskNowTime";
     public static final String EXTRA_USER_SELECTED_TIME = "com.example.taskmanager2.extraUserSelectedTime";
 
     private TimePicker mTimePicker;
-    private Date mTaskNowDate;
+    private Date mTaskNowtime;
 
     /************************* CONSTRUCTOR **********************/
 
@@ -43,7 +43,7 @@ public class TimePickerFragment extends DialogFragment {
 
         TimePickerFragment fragment = new TimePickerFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARGS_TASK_NOW_DATE, date);
+        args.putSerializable(ARGS_TASK_NOW_TIME, date);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,7 +53,7 @@ public class TimePickerFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.d("TAG", "TimePickerFragment onCreate");
         super.onCreate(savedInstanceState);
-        mTaskNowDate = (Date) getArguments().getSerializable(ARGS_TASK_NOW_DATE);
+        mTaskNowtime = (Date) getArguments().getSerializable(ARGS_TASK_NOW_TIME);
 
     }
 
@@ -110,14 +110,12 @@ public class TimePickerFragment extends DialogFragment {
                 mTimePicker.setMinute(calendar.get(Calendar.MINUTE));
             }
 */
-        Log.d("TAG", "TimePickerFragment initViews   "+mTaskNowDate.toString());
+        Log.d("TAG", "TimePickerFragment initViews   "+ mTaskNowtime.toString());
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mTaskNowDate);
-        mTimePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+        calendar.setTime(mTaskNowtime);
+        mTimePicker.setHour(calendar.get(Calendar.HOUR));
         mTimePicker.setMinute(calendar.get(Calendar.MINUTE));
-
-       // int hour = mCalendar.get(Calendar.HOUR);
 
     }
 
@@ -129,22 +127,13 @@ public class TimePickerFragment extends DialogFragment {
         int hour = mTimePicker.getHour();
         int minute = mTimePicker.getMinute();
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.HOUR, hour);
         calendar.set(Calendar.MINUTE, minute);
         Date userSelectedTime = calendar.getTime();
         Log.d("TAG", "TimePickerFragment extract selected    "+userSelectedTime.toString());
 
         return userSelectedTime;
 
-        /*LocalDateTime now = LocalDateTime.now();
-        int hour = mTimePicker.getHour();
-        int minute = mTimePicker.getMinute();
-        int second = now.getSecond();
-
-        mCalendar.set(Calendar.HOUR_OF_DAY, hour);
-        mCalendar.set(Calendar.MINUTE, minute);
-        mCalendar.set(Calendar.SECOND, second);
-*/
 
     }
 

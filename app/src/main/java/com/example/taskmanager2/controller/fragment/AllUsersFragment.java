@@ -199,8 +199,9 @@ public class AllUsersFragment extends Fragment {
 
     /************************* GET STRING FORMAT DATE ******************/
     private String getStringFormatDate(Date date) {
-        return new SimpleDateFormat("yyy/MM/dd  " + "HH:mm:ss").format(date);
+        return new SimpleDateFormat("yyy/MM/dd  "+"HH:mm:ss" ).format(date);
     }
+
 
     /******************** GENERATE SNACK BAR *********************/
     private void generateSnackbar(View view, int stringId) {

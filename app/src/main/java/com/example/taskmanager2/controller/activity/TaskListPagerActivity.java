@@ -7,34 +7,22 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Filter;
-import android.widget.SearchView;
 
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.fragment.TaskListFragment;
-import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
-import com.example.taskmanager2.repository.TaskDBRepository;
-import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TaskListPagerActivity extends AppCompatActivity {
 
     public static final String EXTRA_USERNAME = "extraUsername";
+    public static final String BUNDEL_TASK_LIST_FRAGMENTS = "taskListFragments";
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager2;
     private String mUsername;
@@ -55,10 +43,22 @@ public class TaskListPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list_pager);
         mUsername = getIntent().getStringExtra(EXTRA_USERNAME);
+        if (savedInstanceState != null) {
+            /*mTaskListFragments =
+                    (ArrayList<TaskListFragment>) savedInstanceState
+                            .getSerializable(BUNDEL_TASK_LIST_FRAGMENTS);
+            */
+        }
 
         findViews();
         initViews();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(BUNDEL_TASK_LIST_FRAGMENTS, mTaskListFragments);
     }
 
     /********************* FIND VIEWS *********************/
@@ -104,12 +104,12 @@ public class TaskListPagerActivity extends AppCompatActivity {
     /************************ SET TAB VIEW *******************************/
     private void setTabView() {
 
-       mViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        mViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
 
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-               mTaskListFragments.get(position).updateList();
+                mTaskListFragments.get(position).updateList();
             }
 
         });
@@ -117,7 +117,7 @@ public class TaskListPagerActivity extends AppCompatActivity {
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.d("TAG","addOnTabSelectedListener");
+                Log.d("TAG", "addOnTabSelectedListener");
                 mViewPager2.setCurrentItem(tab.getPosition());
             }
 

@@ -26,7 +26,7 @@ public class User implements Serializable {
     @ColumnInfo(name = UserCols.UUID)
     private UUID mUUID;
     @ColumnInfo(name = UserCols.SIGN_UP_DATE)
-    private  Date mSignUpDate;
+    private Date mSignUpDate;
 
     public long getId() {
         return mId;

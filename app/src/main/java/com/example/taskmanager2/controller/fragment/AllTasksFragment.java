@@ -25,6 +25,7 @@ import com.google.android.material.textview.MaterialTextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import com.example.taskmanager2.utils.Format;
 
 import static com.example.taskmanager2.controller.fragment.TaskListFragment.REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT;
 import static com.example.taskmanager2.controller.fragment.TaskListFragment.TAG_EDITABLE_DETAIL_FRAGMENT;
@@ -167,7 +168,7 @@ public class AllTasksFragment extends Fragment {
             mTask = task;
             if (task != null) {
                 mTextViewTitle.setText(task.getTitle());
-                mTextViewDate.setText(getStringFormatDate(task.getDate()));
+                mTextViewDate.setText(Format.getStringFormatDateAndTime(task.getDate(),task.getTime()));
                 if (!task.getTitle().isEmpty()) {
 
                     mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
@@ -187,10 +188,7 @@ public class AllTasksFragment extends Fragment {
 
     }
 
-    /************************* GET STRING FORMAT DATE ******************/
-    private String getStringFormatDate(Date date) {
-        return new SimpleDateFormat("yyy/MM/dd  " + "HH:mm:ss").format(date);
-    }
+
 
 
     /******************** ON ACTIVITY RESULT ****************/

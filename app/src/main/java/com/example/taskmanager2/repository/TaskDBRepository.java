@@ -19,6 +19,7 @@ import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,13 +45,13 @@ public class TaskDBRepository implements ITaskRepository {
 
     /******************** CONSTRUCTOR ***********************/
     private TaskDBRepository(Context context) {
-        mContext=context.getApplicationContext();
-        TaskManagerDatabase taskManagerDatabase= Room.databaseBuilder(mContext,
+        mContext = context.getApplicationContext();
+        TaskManagerDatabase taskManagerDatabase = Room.databaseBuilder(mContext,
                 TaskManagerDatabase.class,
                 TaskManagerDBSchema.NAME)
                 .allowMainThreadQueries()
                 .build();
-        mTaskDBDAO=taskManagerDatabase.getTaskDBDAO();
+        mTaskDBDAO = taskManagerDatabase.getTaskDBDAO();
        /* TaskManagerDBHelper taskManagerDBHelper = new
                 TaskManagerDBHelper(context.getApplicationContext());
         mDatabase = taskManagerDBHelper.getWritableDatabase();
@@ -69,7 +70,7 @@ public class TaskDBRepository implements ITaskRepository {
 
     /************************** GET TASKS *************************/
     public List<Task> getTasks() {
-         return mTaskDBDAO.getTasks();
+        return mTaskDBDAO.getTasks();
 
         /*List<Task> tasks = new ArrayList<>();
         TaskCursorWrapper taskCursorWrapper = queryTaskCursor(null, null);
@@ -102,7 +103,6 @@ public class TaskDBRepository implements ITaskRepository {
         return new Task(uuid,id,username,title,description,date,state);
     }
 */
-
 
 
     /********************** GET TASK WITH UUID *******************/
@@ -143,9 +143,10 @@ public class TaskDBRepository implements ITaskRepository {
         return new TaskCursorWrapper(cursor);
     }
 */
+
     /****************** GET TASK  WITH TITLE *********************/
     public Task getTask(String title) {
-       return   mTaskDBDAO.getTask(title);
+        return mTaskDBDAO.getTask(title);
 
        /* String whereClause = TaskCols.TITLE + " = ?";
         String[] whereArgs = new String[]{
@@ -214,7 +215,7 @@ public class TaskDBRepository implements ITaskRepository {
     }
 
     /*******************DELETE TASK WITH UUID *******************/
-   // public void deleteTask(UUID taskUuid) {
+    // public void deleteTask(UUID taskUuid) {
         /*String whereClause = TaskCols.UUID + " = ?";
         String[] whereArgs = new String[]{
                 taskUuid.toString()
@@ -254,15 +255,17 @@ public class TaskDBRepository implements ITaskRepository {
 
     }
 
-    public File getPhotoFile(Task task){
-        File filesDir=mContext.getFilesDir();
-        if(task!=null){
-        File photoFile=new File(filesDir,task.getPhotoFileName());
-        return photoFile;
+    /***************************  GET PHOTO FILE ****************************/
+    public File getPhotoFile(Task task) throws IOException {
+        File filesDir = mContext.getFilesDir();
+        if (task != null) {
+            File photoFile = new File(filesDir, task.getPhotoFileName());
+            return photoFile;
 
         }
-        return null;
-    }
+        throw new IOException();
 
+
+    }
 
 }

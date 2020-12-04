@@ -142,7 +142,7 @@ public class EditableDetailFragment extends DialogFragment {
 
     /************************* GET STRING EXTRACT TIME *******************/
     private String getStringExactTime() {
-        return new SimpleDateFormat("HH:mm:ss").format(mTask.getDate());
+        return new SimpleDateFormat("HH:mm:ss").format(mTask.getTime());
     }
 
     /************************* GET STRING EXTRACT DATE ******************/
@@ -166,7 +166,7 @@ public class EditableDetailFragment extends DialogFragment {
         mButtonTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerFragment timePickerFragment = TimePickerFragment.newInstance(mTask.getDate());
+                TimePickerFragment timePickerFragment = TimePickerFragment.newInstance(mTask.getTime());
                 timePickerFragment.
                         setTargetFragment(
                                 EditableDetailFragment.this, REQUEST_CODE_TIME_PICKER_FRAGMENT);

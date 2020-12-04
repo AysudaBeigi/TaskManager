@@ -23,8 +23,9 @@ public class TaskCursorWrapper extends CursorWrapper {
         String description = getString(getColumnIndex(TaskCols.DESCRIPTION));
         String photoAddress = getString(getColumnIndex(TaskCols.PHOTO_ADDRESS));
         Date date = new Date(getLong(getColumnIndex(TaskCols.DATE)));
+        Date time = new Date(getLong(getColumnIndex(TaskCols.TIME)));
         TaskState state =TaskState.valueOf(getString(getColumnIndex(TaskCols.STATE)));
-        return new Task(uuid,username,title,description,date,state,photoAddress);
+        return new Task(uuid,username,title,description,date,time,state,photoAddress);
 
     }
 

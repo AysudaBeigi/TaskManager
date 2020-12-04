@@ -3,6 +3,7 @@ package com.example.taskmanager2.repository;
 import com.example.taskmanager2.model.Task;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public interface ITaskRepository {
 
     void updateTask(Task task);
 
-    File getPhotoFile(Task task);
+    File getPhotoFile(Task task) throws IOException;
 
 
 }

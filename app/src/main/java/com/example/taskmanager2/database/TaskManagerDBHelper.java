@@ -35,6 +35,7 @@ public class TaskManagerDBHelper extends SQLiteOpenHelper {
                 TaskCols.DESCRIPTION + " TEXT ," +
                 TaskCols.PHOTO_ADDRESS + " TEXT ," +
                 TaskCols.DATE + " TEXT NOT NULL," +
+                TaskCols.TIME + " TEXT NOT NULL," +
                 TaskCols.STATE + " TEXT NOT NULL );");
     }
 

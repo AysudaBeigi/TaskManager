@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 
 public class PictureUtils {
+
     public static Bitmap getScaledBitmap(String filePath,int dstWidth,int dstHeight){
         BitmapFactory.Options options=new BitmapFactory.Options();
         options.inJustDecodeBounds=true;

@@ -4,6 +4,8 @@
     android:id="@+id/date_picker"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pink_89"
+    android:headerBackground="@color/blue_35"
     tools:context=".controller.fragment.DatePickerFragment">
 
 

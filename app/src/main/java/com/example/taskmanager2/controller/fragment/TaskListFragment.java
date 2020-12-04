@@ -3,6 +3,7 @@ package com.example.taskmanager2.controller.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,6 +11,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,11 +39,14 @@ import com.example.taskmanager2.model.Task;
 import com.example.taskmanager2.model.TaskState;
 import com.example.taskmanager2.repository.TaskDBRepository;
 import com.example.taskmanager2.repository.UserDBRepository;
+import com.example.taskmanager2.utils.Format;
 import com.example.taskmanager2.utils.PictureUtils;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,12 +58,12 @@ public class TaskListFragment extends Fragment {
     public static final String ARGS_USERNAME = "username";
     public static final String ARGS_STATE = "state";
     public static final String TAG_EDITABLE_DETAIL_FRAGMENT = "tagEditableDetailFragment";
+    public static final String TAG_ADD_TASK_FRAGMENT = "tagAddTaskFragment";
 
     public static final int REQUEST_CODE_EDITABLE_DETAIL_FRAGMENT = 1;
     public static final int REQUEST_CODE_ADD_TASK_FRAGMENT = 2;
-    public static final String TAG_ADD_TASK_FRAGMENT = "tagAddTaskFragment";
     public static final int REQUEST_CODE_TAKE_PICTURE = 3;
-    public static final String AUTHORITY = "com.example.taskmanegerapplication.fileprovider";
+    public static final String AUTHORITY = "com.example.taskmanager2.fileprovider";
 
     private String mUsername;
     private TaskState mState;
@@ -74,9 +79,12 @@ public class TaskListFragment extends Fragment {
 
     private Task mTask;
 
+
     private File mPhotoFile;
     private ShapeableImageView mImageViewTaskIcon;
     private boolean mIsPhotoTaken = false;
+
+    private Task mItemTask;
 
 
     /*********************** CONSTRUCTOR *********************/
@@ -145,22 +153,6 @@ public class TaskListFragment extends Fragment {
 
     }
 
-    /******************* SET LISTENER ********************/
-    private void setListener() {
-        Log.d("TAG", "TLF listener AddTask ");
-
-        mButtonAddTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddTaskFragment addTaskFragment =
-                        AddTaskFragment.newInstance(mUsername, mState);
-                addTaskFragment.setTargetFragment(
-                        TaskListFragment.this, REQUEST_CODE_ADD_TASK_FRAGMENT);
-                addTaskFragment.show(getFragmentManager(), TAG_ADD_TASK_FRAGMENT);
-            }
-        });
-    }
-
     /************************* UPDATE LIST *********************/
     public void updateList() {
         if (mUserDBRepository != null) {
@@ -187,6 +179,22 @@ public class TaskListFragment extends Fragment {
                 visibleEmptyAddViews();
             }
         }
+    }
+
+    /******************* SET LISTENER ********************/
+    private void setListener() {
+        Log.d("TAG", "TLF listener AddTask ");
+
+        mButtonAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddTaskFragment addTaskFragment =
+                        AddTaskFragment.newInstance(mUsername, mState);
+                addTaskFragment.setTargetFragment(
+                        TaskListFragment.this, REQUEST_CODE_ADD_TASK_FRAGMENT);
+                addTaskFragment.show(getFragmentManager(), TAG_ADD_TASK_FRAGMENT);
+            }
+        });
     }
 
     /********************** VISIBLE EMPTY ADD VIEWS ******************/
@@ -218,9 +226,7 @@ public class TaskListFragment extends Fragment {
             Log.d("TAG", " tASK ADAPTER setTask");
 
             mTasks = tasks;
-            if (tasks != null)
-                mFilteredTaskList = new ArrayList<>(tasks);
-            notifyDataSetChanged();
+            mFilteredTaskList = new ArrayList<>(tasks);
 
         }
 
@@ -258,21 +264,14 @@ public class TaskListFragment extends Fragment {
         public Filter getFilter() {
             return new Filter() {
                 @Override
-                protected FilterResults performFiltering(CharSequence charSequence) {
+                protected FilterResults performFiltering(CharSequence searchedChars) {
                     List<Task> filteredList = new ArrayList<>();
 
-                    if (charSequence.toString().isEmpty()) {
+                    if (searchedChars == null || searchedChars.toString().isEmpty()) {
                         filteredList.addAll(mFilteredTaskList);
                     } else {
                         for (Task task : mFilteredTaskList) {
-                            if (task.getTitle().toLowerCase()
-                                    .contains(charSequence.toString().toLowerCase()) ||
-                                    task.getDescription().toLowerCase()
-                                            .contains(charSequence.toString().toLowerCase()) ||
-                                    task.getSate().toString()
-                                            .contains(charSequence.toString().toLowerCase()) ||
-                                    task.getDate().toString().toLowerCase()
-                                            .contains(charSequence.toString().toLowerCase())) {
+                            if (getCondition(searchedChars, task)) {
                                 filteredList.add(task);
                             }
                         }
@@ -283,6 +282,17 @@ public class TaskListFragment extends Fragment {
                     return results;
                 }
 
+                private boolean getCondition(CharSequence charSequence, Task task) {
+                    return task.getDate().toString().toLowerCase().trim()
+                            .contains(charSequence.toString().toLowerCase().trim()) ||
+                            task.getTitle().toLowerCase().trim()
+                                    .contains(charSequence.toString().toLowerCase().trim()) ||
+                            task.getDescription().toLowerCase().trim()
+                                    .contains(charSequence.toString().toLowerCase().trim()) ||
+                            task.getSate().toString().trim()
+                                    .contains(charSequence.toString().toLowerCase().trim());
+                }
+
                 @Override
                 protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                     if (mTasks != null)
@@ -291,7 +301,9 @@ public class TaskListFragment extends Fragment {
                         mTasks.addAll((Collection<? extends Task>) filterResults.values);
                     notifyDataSetChanged();
                 }
+
             };
+
         }
     }
 
@@ -339,28 +351,38 @@ public class TaskListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Log.d("TAG", "icon listener ");
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    try {
-                        if (takePictureIntent.
-                                resolveActivity(getActivity().getPackageManager()) != null
-                                && mPhotoFile != null) {
+                    takePhoto();
+                }
+
+                private void takePhoto() {
+                    Intent imageCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    Intent takePictureIntent = Intent.createChooser(imageCaptureIntent, "take photo");
+                    if (takePictureIntent.
+                            resolveActivity(getActivity().getPackageManager()) != null) {
+                        mPhotoFile = null;
+                        try {
+                            mPhotoFile = mTaskDBRepository.getPhotoFile(mTask);
+                            String path = mPhotoFile.getAbsolutePath();
                             Uri photoUri = getUriForPhotoFile();
+                            Log.d("TAG", "photoUri" + photoUri.toString());
                             grantWriteUriDestinationActivities(takePictureIntent, photoUri);
                             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                             startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PICTURE);
+
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
                         }
-                    } catch (ActivityNotFoundException e) {
-                        Log.d("TAG", e.getMessage());
                     }
                 }
+
             });
         }
 
         private void grantWriteUriDestinationActivities(Intent takePictureIntent, Uri photoUri) {
-            List<ResolveInfo> activities = getActivity().
-                    getPackageManager().
-                    queryIntentActivities(
-                            takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            List<ResolveInfo> activities = getActivity()
+                    .getPackageManager().
+                            queryIntentActivities(
+                                    takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
             for (ResolveInfo activity : activities) {
                 getActivity().grantUriPermission(
                         activity.activityInfo.packageName,
@@ -383,7 +405,7 @@ public class TaskListFragment extends Fragment {
         private String getTaskReport() {
             String title = mTask.getTitle();
             String description = mTask.getDescription();
-            String dateStr = getStringFormatDate(mTask.getDate());
+            String dateStr = Format.getStringFormatDateAndTime(mTask.getDate(), mTask.getTime());
             String stateStr = mTask.getSate().toString();
             String report = getString(R.string.task_report, title, description, dateStr, stateStr);
             return report;
@@ -392,18 +414,16 @@ public class TaskListFragment extends Fragment {
         public void bindView(Task task) {
             Log.d("TAG", "TLF bindView ");
 
+            mItemTask = task;
             mTask = task;
             mTextViewTitle.setText(task.getTitle());
-            mTextViewDate.setText(getStringFormatDate(task.getDate()));
+            mTextViewDate.setText(Format.getStringFormatDateAndTime(task.getDate(), task.getTime()));
             if (!task.getTitle().isEmpty()) {
                 mTextViewFirstChar.setText(String.valueOf(task.getTitle().charAt(0)));
 
             }
-            mPhotoFile = mTaskDBRepository.getPhotoFile(task);
-            if (mIsPhotoTaken) {
-                task.setPhotoAddress(mPhotoFile.getAbsolutePath());
-                mTaskDBRepository.updateTask(task);
-            }
+            updateIconPhoto(task);
+
 
         }
 
@@ -418,13 +438,22 @@ public class TaskListFragment extends Fragment {
     }
 
     private Uri getUriForPhotoFile() {
-        return FileProvider.getUriForFile(getContext(), AUTHORITY, mPhotoFile);
+
+        return FileProvider.getUriForFile(getActivity(), AUTHORITY, mPhotoFile);
     }
 
-    /************************* GET STRING FORMAT DATE ******************/
-    private String getStringFormatDate(Date date) {
-        return new SimpleDateFormat("yyy/MM/dd  " + "HH:mm:ss").format(date);
+    private void updateIconPhoto(Task task) {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            Log.d("TAG", "mPhotoFile is null");
+
+        } else {
+
+            Bitmap bitmap = PictureUtils.getScaledBitmap(task.getPhotoAddress(), getActivity());
+            mImageViewTaskIcon.setImageBitmap(bitmap);
+
+        }
     }
+
 
     /******************** ON ACTIVITY RESULT ****************/
     @Override
@@ -456,9 +485,10 @@ public class TaskListFragment extends Fragment {
                 updateList();
                 break;
             case REQUEST_CODE_TAKE_PICTURE:
+                Log.d("TAG", "take Picture ");
+                mItemTask.setPhotoAddress(mPhotoFile.getAbsolutePath());
+                mTaskDBRepository.updateTask(mItemTask);
                 revokeWriteUriPermission();
-                updateIconPhoto();
-                mIsPhotoTaken = true;
                 updateList();
 
                 break;
@@ -467,15 +497,9 @@ public class TaskListFragment extends Fragment {
 
     }
 
-    private void updateIconPhoto() {
-        if (mPhotoFile == null || !mPhotoFile.exists()) {
-            return;
-        }
-        Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getAbsolutePath(), getActivity());
-        mImageViewTaskIcon.setImageBitmap(bitmap);
-    }
-
+    /*************** REVOKE WRITE URI PERMISSION *****************/
     private void revokeWriteUriPermission() {
+        Log.d("TAG", "revokeWriteUriPermission");
         Uri photoUri = getUriForPhotoFile();
         getActivity().revokeUriPermission(photoUri,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -486,8 +510,8 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_task_list, menu);
-        MenuItem searchItem=menu.findItem(R.id.menu_item_search);
-        SearchView searchView= (SearchView) searchItem.getActionView();
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -501,6 +525,7 @@ public class TaskListFragment extends Fragment {
                 return false;
             }
         });
+
     }
 
     /**************** ON OPTION MENU SELECTED ****************/
