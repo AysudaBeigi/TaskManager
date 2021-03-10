@@ -34,7 +34,7 @@ This is a application helps you to manage your tasks .
  
  ## Data Structure 
  
-- [x] MVVM
+- [x] MVC
  
  ## External Libraries
- - Retrofit, EventBus, WorkManager, Room, Picasso, GoogleServices, Lottie, NanigationComponetn , MaterilaDesign
+ - Room, MaterilaDesign
