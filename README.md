@@ -9,9 +9,9 @@ This is a application helps you to manage your tasks .
 
 <br>
 
-|Product detail page |Product detail page |  Category products Page |Shopping bag page | User profile Page |
+|All tasks page |Edit task page |  Sahre task Page |Take picture page | Search task Page |
 |--|--|--|--|--|
-| <img src="https://user-images.githubusercontent.com/74787164/110628970-e7ed8280-81b8-11eb-898c-56d2337421f5.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110628988-ecb23680-81b8-11eb-9ffc-74f3e5a4fdb7.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110629174-22571f80-81b9-11eb-9597-6b519d851907.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110629362-53375480-81b9-11eb-9981-86984dc3a1f6.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110629666-aad5c000-81b9-11eb-8e9c-bb0497424028.jpg" width=300px> |
+| <img src="https://user-images.githubusercontent.com/74787164/110635545-79acbe00-81c0-11eb-99a4-7fb8a1c8b2f2.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110635701-a2cd4e80-81c0-11eb-8494-33e03c15792f.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110635701-a2cd4e80-81c0-11eb-8494-33e03c15792f.jpg" width=300px> | <img src="(https://user-images.githubusercontent.com/74787164/110635818-c6909480-81c0-11eb-97d8-ad467b0fdd3a.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110635845-d0b29300-81c0-11eb-956a-5e7ff18a7868.jpg" width=300px> |
 
 <br>
 <br>
