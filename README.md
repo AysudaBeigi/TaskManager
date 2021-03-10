@@ -19,7 +19,7 @@ This is a application helps you to manage your tasks .
 
 |All tasks page |Edit tasks by admin page | All users Page |
 |--|--|--|
-| <img src="https://user-images.githubusercontent.com/74787164/110637165-5b47c200-81c2-11eb-9e72-b6c8d3722a74.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110637190-600c7600-81c2-11eb-9331-cd8b3ba6b8de.jpg" width=300px> | <img src="(https://user-images.githubusercontent.com/74787164/110637179-5e42b280-81c2-11eb-8cac-edb5723bbba3.jpg" width=300px> | 
+| <img src="https://user-images.githubusercontent.com/74787164/110637165-5b47c200-81c2-11eb-9e72-b6c8d3722a74.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110637190-600c7600-81c2-11eb-9331-cd8b3ba6b8de.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110637179-5e42b280-81c2-11eb-8cac-edb5723bbba3.jpg" width=300px> | 
 <br>
 
 
