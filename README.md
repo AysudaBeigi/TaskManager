@@ -9,9 +9,10 @@ This is a application helps you to manage your tasks .
 
 <br>
 
-|All tasks page |Edit task page |  Sahre task Page |Take picture page | Search task Page |
-|--|--|--|--|--|
-| <img src="https://user-images.githubusercontent.com/74787164/110635545-79acbe00-81c0-11eb-99a4-7fb8a1c8b2f2.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110635701-a2cd4e80-81c0-11eb-8494-33e03c15792f.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110635818-c6909480-81c0-11eb-97d8-ad467b0fdd3a.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110636290-59313380-81c1-11eb-8a27-8480ba8b40c9.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110635845-d0b29300-81c0-11eb-956a-5e7ff18a7868.jpg" width=300px> |
+|All tasks page |Edit task page |  Sahre task Page |Take picture page | Search task Page |Admin page|
+|--|--|--|--|--|--|
+| <img src="https://user-images.githubusercontent.com/74787164/110635545-79acbe00-81c0-11eb-99a4-7fb8a1c8b2f2.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110635701-a2cd4e80-81c0-11eb-8494-33e03c15792f.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110635818-c6909480-81c0-11eb-97d8-ad467b0fdd3a.jpg" width=300px> | <img src="https://user-images.githubusercontent.com/74787164/110636290-59313380-81c1-11eb-8a27-8480ba8b40c9.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110635845-d0b29300-81c0-11eb-956a-5e7ff18a7868.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110636511-94cbfd80-81c1-11eb-9c97-593043ac32d8.jpg" width=300px> |
+
 
 <br>
 <br>
