@@ -5,10 +5,7 @@ This is a application helps you to manage your tasks .
 
 |Sign in Page | Signup Page |All tasks page |Add task page|Date picker page|Time picker page|
 |--|--|--|--|--|--|
-| <img src="https://user-images.githubusercontent.com/74787164/110634358-1c643d00-81bf-11eb-9624-dcf7904c4a58.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110634565-56354380-81bf-11eb-9764-e5a407c8afe3.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110634765-95fc2b00-81bf-11eb-99a4-3305dbf82389.jpg" width=300px> |
-<img src="https://user-images.githubusercontent.com/74787164/110634884-b88e4400-81bf-11eb-8bbb-8620d2f87d21.jpg" width=300px> |
-<img src="https://user-images.githubusercontent.com/74787164/110634995-deb3e400-81bf-11eb-94e0-1da107cdaec0.jpg" width=300px> |
-<img src="https://user-images.githubusercontent.com/74787164/110635003-e07da780-81bf-11eb-9d57-807a99457072.jpg" width=300px> |
+| <img src="https://user-images.githubusercontent.com/74787164/110634358-1c643d00-81bf-11eb-9624-dcf7904c4a58.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110634565-56354380-81bf-11eb-9764-e5a407c8afe3.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110634765-95fc2b00-81bf-11eb-99a4-3305dbf82389.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110634884-b88e4400-81bf-11eb-8bbb-8620d2f87d21.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110634995-deb3e400-81bf-11eb-94e0-1da107cdaec0.jpg" width=300px> |<img src="https://user-images.githubusercontent.com/74787164/110635003-e07da780-81bf-11eb-9d57-807a99457072.jpg" width=300px> |
 
 <br>
 
