@@ -24,14 +24,12 @@ This is a application helps you to manage your tasks .
 
 
  ## Features
- - [x] Request to Woocamerce Rest api and receive products and categories with product detail such as : name, description, price, regular price, reviews, images
- - [x] Post customer to server and save customer information in room database
- - [x] Post comment for a product 
- - [x] Post order and apply a discount on total price
- - [x] Search and sort products
- - [x] Send notification when create a new product in server
- - [x] Select user address in google map
- 
+ - [x] display a list of tasks and has the ability to add, delete, edit and change the status of the job.
+ - [x] Each job includes title, description, date, time and status (Done and Doing, Todo).
+ - [x] If you click on the add button, a dialog will open and the task information will be received from the user.
+ - [x] Clicking on any task will open a new dialog and display the task in its entirety, including features such as deleting the task, editing the task, and changing the status.
+ - [x] A login page is located at the beginning of the application. On this page, the user can enter the program by entering his username and password and view only his tasks.
+ - [x] admin has access to all user tasks and can also delete or edit user tasks. It also has the ability to view the list of all users in separate pages along with the membership date and the number of tasks of each user.
  ## Data Structure 
  
 - [x] MVC
