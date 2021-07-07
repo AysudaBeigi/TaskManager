@@ -1,6 +1,5 @@
 package com.example.taskmanager2;
 
-import com.example.taskmanager2.controller.fragment.SignInFragment;
 import com.example.taskmanager2.controller.fragment.SignUpFragment;
 
 import org.junit.Before;
@@ -26,40 +25,30 @@ public class SignUpUnitTest {
     }
 
     @Test
-    public void test_validateUserCredentials_userDidNotEnterUsername_displayErrorMessage() throws Exception {
+    public void test_validateUserCredentials_userDidNotEnterUsernameOrPassword_displayErrorMessage() throws Exception {
         String username = "";
-        String password = "kana";
+        String password = "";
         signUpFragment.setUsernameAndPassword(username, password);
         signUpFragment.isUserPassEntered();
-
-        Mockito.verify(view).displayHaveNotAccountMessage();
+        Mockito.verify(view).displayUserOrPassCantBeEmptyMessage();
     }
 
     @Test
-    public void test_validateUserCredentials_userEnteredWrongUsername_displayErrorMessage() throws Exception {
+    public void test_validateUserCredentials_userEnteredTakenUsernameOrPassword_displayErrorMessage() throws Exception {
         String username = "Jaimeeee";
         String password = "kana";
         signUpFragment.setUsernameAndPassword(username, password);
-        signUpFragment.isUsernameTaken();
-        Mockito.verify(view).displayHaveNotAccountMessage();
+        signUpFragment.isTakenUserPass();
+        Mockito.verify(view).displayUserOrPassIsTakenMessage();
     }
 
     @Test
-    public void test_validateUserCredentials_userEnteredWrongPassword_displayErrorMessage() throws Exception {
-        String username = "Jaime";
-        String password = "kana";
-        signUpFragment.setUsernameAndPassword(username, password);
-        signUpFragment.isMachUsernameAndPassword();
-        Mockito.verify(view).displayDontMatchUserAndPassMessage();
-    }
-
-    @Test
-    public void test_validateUserCredentials_userEnteredMatchedUsernameAndPassword_performApiCallToSignInUser() throws Exception {
+    public void test_validateUserCredentials_userEnteredNotTakenUsernameAndPassword_performApiCallToSignInUser() throws Exception {
         String username = "Jaime";
         String password = "kanay";
         signUpFragment.setUsernameAndPassword(username, password);
-        signUpFragment.isMachUsernameAndPassword();
-        Mockito.verify(view).displayDontMatchUserAndPassMessage();
+        signUpFragment.isTakenUserPass();
+        Mockito.verify(view).displayWelcomeMessage();
     }
 
 }

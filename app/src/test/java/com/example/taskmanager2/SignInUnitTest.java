@@ -60,7 +60,7 @@ public class SignInUnitTest {
         String password = "kanay";
         signInFragment.setUserAndPass(username, password);
         signInFragment.isMachUsernameAndPassword();
-        Mockito.verify(view).displayDontMatchUserAndPassMessage();
+        Mockito.verify(view).displayWelcomeMessage();
     }
 
 }

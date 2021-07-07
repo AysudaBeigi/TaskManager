@@ -98,6 +98,7 @@ public class SignUpFragment extends Fragment {
                         mEditTextPassword.getText().toString());
                 if (isUserPassEntered()) {
                     if (!isTakenUserPass()) {
+                        displayWelcomeMessage();
                         signUpUser(mUsername, mPassword);
                         if (mUsername.equals("admin"))
                             startAdminActivity();
@@ -108,13 +109,13 @@ public class SignUpFragment extends Fragment {
                     }
 
                 } else {
-                    displayUserOrPassCantBeEmpty();
+                    displayUserOrPassCantBeEmptyMessage();
                 }
             }
         });
     }
 
-    public void displayUserOrPassCantBeEmpty() {
+    public void displayUserOrPassCantBeEmptyMessage() {
         generateSnackbar(
                 mLinearLayoutSignup, R.string.snackbar_username_or_password_is_empty);
     }
@@ -122,6 +123,9 @@ public class SignUpFragment extends Fragment {
     public void displayUserOrPassIsTakenMessage() {
         generateSnackbar(
                 mLinearLayoutSignup, R.string.snackbar_is_taken_username_or_password);
+    }
+    public void displayWelcomeMessage() {
+        generateSnackbar(mLinearLayoutSignup, R.string.snackbar_user_find);
     }
 
     public void setUsernameAndPassword(String username, String password) {
