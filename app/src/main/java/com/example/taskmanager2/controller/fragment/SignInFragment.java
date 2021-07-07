@@ -66,7 +66,6 @@ public class SignInFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //Log.d("TAG", "this is SignIn onCreateView   ");
 
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         findViews(view);
@@ -90,33 +89,28 @@ public class SignInFragment extends Fragment {
         mButtonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Log.d("TAG", "this is SignIn listener login  ");
 
-                mUsername = mEditTextUsername.getText().toString();
-                mPassword = mEditTextPassword.getText().toString();
+                setUserAndPass(mEditTextUsername.getText().toString(),
+                        mEditTextPassword.getText().toString());
 
-                    if (isUserPassEntered()&& isUsernameTaken()) {
-                        // Log.d("TAG", "user exits   ");
+                if (isUserPassEntered() && isUsernameTaken()) {
 
-                        if (isMachUsernameAndPassword()) {
-                            //Log.d("TAG", "username and password are correct");
-                            generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_user_find);
-                            if (mUsername.equals("admin")) {
-                                startAdminActivity();
-                            } else {
-                                startTaskListPagerActivity();
-                            }
+                    if (isMachUsernameAndPassword()) {
+                        displayWelcomeMessage();
+                        if (mUsername.equals("admin")) {
+                            startAdminActivity();
                         } else {
-                            // Log.d("TAG", "username is correct but password is incorrect");
-                            generateSnackbar(mLinearLayoutSignIn,
-                                    R.string.snackbar_invalid_username_or_password);
+                            startTaskListPagerActivity();
                         }
+                    } else {
+                        displayDontMatchUserAndPassMessage();
 
-                    } else if (haveNotAccount()) {
-
-                        //  Log.d("TAG", "you have not account ");
-                        generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_not_exits_user);
                     }
+
+                } else if (haveNotAccount()) {
+
+                    displayHaveNotAccountMessage();
+                }
 
             }
         });
@@ -131,15 +125,33 @@ public class SignInFragment extends Fragment {
         });
     }
 
+    public void displayWelcomeMessage() {
+        generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_user_find);
+    }
+
+    public void displayDontMatchUserAndPassMessage() {
+        generateSnackbar(mLinearLayoutSignIn,
+                R.string.snackbar_invalid_username_or_password);
+    }
+
+    public void displayHaveNotAccountMessage() {
+        generateSnackbar(mLinearLayoutSignIn, R.string.snackbar_not_exits_user);
+    }
+
+    public void setUserAndPass(String username, String password) {
+        mUsername = username;
+        mPassword = password;
+    }
+
     private boolean haveNotAccount() {
-        return !isUsernameTaken(mUsername) ;
+        return !isUsernameTaken(mUsername);
     }
 
-    private boolean isUsernameTaken() {
-        return isUsernameTaken(mUsername) ;
+    public boolean isUsernameTaken() {
+        return isUsernameTaken(mUsername);
     }
 
-    private boolean isUserPassEntered() {
+    public boolean isUserPassEntered() {
         return !mUsername.isEmpty() && !mPassword.isEmpty()
                 && mUsername != null && mPassword != null;
     }
@@ -157,7 +169,7 @@ public class SignInFragment extends Fragment {
 
 
     /******************** GENERATE SNACK BAR *********************/
-    private void generateSnackbar(View view, int stringId) {
+    public void generateSnackbar(View view, int stringId) {
         Snackbar snackbar = Snackbar
                 .make(view,
                         stringId, Snackbar.LENGTH_LONG);
@@ -179,8 +191,6 @@ public class SignInFragment extends Fragment {
             return true;
         return false;
     }
-
-
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.taskmanager2;
 
 import com.example.taskmanager2.controller.fragment.SignInFragment;
+import com.example.taskmanager2.controller.fragment.SignUpFragment;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,28 +11,26 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertThat;
-
 @RunWith(MockitoJUnitRunner.class)
-public class SignInUnitTest {
+public class SignUpUnitTest {
 
     @Mock
-    SignInFragment view;
+    SignUpFragment view;
 
-    private SignInFragment signInFragment;
+    private SignUpFragment signUpFragment;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        signInFragment = new SignInFragment();
+        signUpFragment = new SignUpFragment();
     }
 
     @Test
     public void test_validateUserCredentials_userDidNotEnterUsername_displayErrorMessage() throws Exception {
         String username = "";
         String password = "kana";
-        signInFragment.setUserAndPass(username, password);
-        signInFragment.isUserPassEntered();
+        signUpFragment.setUsernameAndPassword(username, password);
+        signUpFragment.isUserPassEntered();
 
         Mockito.verify(view).displayHaveNotAccountMessage();
     }
@@ -40,8 +39,8 @@ public class SignInUnitTest {
     public void test_validateUserCredentials_userEnteredWrongUsername_displayErrorMessage() throws Exception {
         String username = "Jaimeeee";
         String password = "kana";
-        signInFragment.setUserAndPass(username, password);
-        signInFragment.isUsernameTaken();
+        signUpFragment.setUsernameAndPassword(username, password);
+        signUpFragment.isUsernameTaken();
         Mockito.verify(view).displayHaveNotAccountMessage();
     }
 
@@ -49,8 +48,8 @@ public class SignInUnitTest {
     public void test_validateUserCredentials_userEnteredWrongPassword_displayErrorMessage() throws Exception {
         String username = "Jaime";
         String password = "kana";
-        signInFragment.setUserAndPass(username, password);
-        signInFragment.isMachUsernameAndPassword();
+        signUpFragment.setUsernameAndPassword(username, password);
+        signUpFragment.isMachUsernameAndPassword();
         Mockito.verify(view).displayDontMatchUserAndPassMessage();
     }
 
@@ -58,8 +57,8 @@ public class SignInUnitTest {
     public void test_validateUserCredentials_userEnteredMatchedUsernameAndPassword_performApiCallToSignInUser() throws Exception {
         String username = "Jaime";
         String password = "kanay";
-        signInFragment.setUserAndPass(username, password);
-        signInFragment.isMachUsernameAndPassword();
+        signUpFragment.setUsernameAndPassword(username, password);
+        signUpFragment.isMachUsernameAndPassword();
         Mockito.verify(view).displayDontMatchUserAndPassMessage();
     }
 

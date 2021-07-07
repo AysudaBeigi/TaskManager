@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import android.widget.LinearLayout;
 import com.example.taskmanager2.R;
 import com.example.taskmanager2.controller.activity.AdminActivity;
 import com.example.taskmanager2.controller.activity.TaskListPagerActivity;
-import com.example.taskmanager2.database.TaskManagerDBSchema;
-import com.example.taskmanager2.database.UserCursorWrapper;
 import com.example.taskmanager2.model.User;
 import com.example.taskmanager2.repository.UserDBRepository;
 import com.google.android.material.button.MaterialButton;
@@ -59,7 +56,6 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Log.d("TAG", "sign up fragment onCreate ");
 
         mUserDBRepository = UserDBRepository.getInstance(getActivity());
     }
@@ -68,7 +64,6 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Log.d("TAG", "sign up fragment onCreateView ");
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         findViews(view);
         setListener();
@@ -99,9 +94,8 @@ public class SignUpFragment extends Fragment {
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Log.d("TAG", "sign up fragment signup listener ");
-                mUsername = mEditTextUsername.getText().toString();
-                mPassword = mEditTextPassword.getText().toString();
+                setUsernameAndPassword(mEditTextUsername.getText().toString(),
+                        mEditTextPassword.getText().toString());
                 if (isUserPassEntered()) {
                     if (!isTakenUserPass()) {
                         signUpUser(mUsername, mPassword);
@@ -110,15 +104,29 @@ public class SignUpFragment extends Fragment {
                         else
                             startPagerActivity();
                     } else {
-                        generateSnackbar(
-                                mLinearLayoutSignup, R.string.snackbar_is_taken_username_or_password);
+                        displayUserOrPassIsTakenMessage();
                     }
 
-                } else
-                    generateSnackbar(
-                            mLinearLayoutSignup, R.string.snackbar_username_or_password_is_empty);
+                } else {
+                    displayUserOrPassCantBeEmpty();
+                }
             }
         });
+    }
+
+    public void displayUserOrPassCantBeEmpty() {
+        generateSnackbar(
+                mLinearLayoutSignup, R.string.snackbar_username_or_password_is_empty);
+    }
+
+    public void displayUserOrPassIsTakenMessage() {
+        generateSnackbar(
+                mLinearLayoutSignup, R.string.snackbar_is_taken_username_or_password);
+    }
+
+    public void setUsernameAndPassword(String username, String password) {
+        mUsername = username;
+        mPassword = password;
     }
 
     private void startAdminActivity() {
@@ -126,11 +134,11 @@ public class SignUpFragment extends Fragment {
         startActivity(intent);
     }
 
-    private boolean isTakenUserPass() {
+    public boolean isTakenUserPass() {
         return isUsernameTaken(mUsername) || isPasswordTaken(mPassword);
     }
 
-    private boolean isUserPassEntered() {
+    public boolean isUserPassEntered() {
         return !mUsername.isEmpty() && !mPassword.isEmpty()
                 && mUsername != null && mPassword != null;
     }
